@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/wisebed/!svn/ver/5422/wiselib/trunk/applications/fronts_unified_app/viz/src/eu/fronts/unified/viz
+END
+JobObserver.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/wisebed/!svn/ver/4287/wiselib/trunk/applications/fronts_unified_app/viz/src/eu/fronts/unified/viz/JobObserver.java
+END
+VizProperties.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/wisebed/!svn/ver/5137/wiselib/trunk/applications/fronts_unified_app/viz/src/eu/fronts/unified/viz/VizProperties.java
+END
+LogObserver.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/wisebed/!svn/ver/4973/wiselib/trunk/applications/fronts_unified_app/viz/src/eu/fronts/unified/viz/LogObserver.java
+END
+VizMain.java
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/wisebed/!svn/ver/5395/wiselib/trunk/applications/fronts_unified_app/viz/src/eu/fronts/unified/viz/VizMain.java
+END
+package.html
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/wisebed/!svn/ver/4070/wiselib/trunk/applications/fronts_unified_app/viz/src/eu/fronts/unified/viz/package.html
+END
