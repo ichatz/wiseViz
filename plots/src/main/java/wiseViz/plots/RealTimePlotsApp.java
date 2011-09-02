@@ -15,7 +15,8 @@ public class RealTimePlotsApp extends SingleFrameApplication {
     /**
      * At startup create and show the main frame of the application.
      */
-    @Override protected void startup() {
+    @Override
+    protected void startup() {
         show(new RealTimePlotsView(this));
     }
 
@@ -24,16 +25,19 @@ public class RealTimePlotsApp extends SingleFrameApplication {
      * Windows shown in our application come fully initialized from the GUI
      * builder, so this additional configuration is not needed.
      */
-    @Override protected void configureWindow(java.awt.Window root) {
+    @Override
+    protected void configureWindow(java.awt.Window root) {
     }
 
     /**
      * A convenient static getter for the application instance.
+     *
      * @return the instance of RealTimePlotsApp
      */
     public static RealTimePlotsApp getApplication() {
         return Application.getInstance(RealTimePlotsApp.class);
     }
+
 
     /**
      * Main method launching the application.

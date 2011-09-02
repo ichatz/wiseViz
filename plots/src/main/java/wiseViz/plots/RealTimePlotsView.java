@@ -3,32 +3,10 @@
  */
 package wiseViz.plots;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jdesktop.application.Action;
+import org.jdesktop.application.FrameView;
 import org.jdesktop.application.ResourceMap;
 import org.jdesktop.application.SingleFrameApplication;
-import org.jdesktop.application.FrameView;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.util.Date;
-import javax.swing.Timer;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -38,6 +16,19 @@ import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.util.Date;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The application's main frame.
@@ -75,9 +66,20 @@ public class RealTimePlotsView extends FrameView {
 
         initComponents();
 
-        // status bar initialization - message timeout, idle icon and busy animation, etc
+
         ResourceMap resourceMap = getResourceMap();
-        int messageTimeout = resourceMap.getInteger("StatusBar.messageTimeout");
+
+        // status bar initialization - message timeout, idle icon and busy animation, etc
+        Properties resourceMap2 = new Properties();
+
+        try {
+            resourceMap2.load(new FileInputStream("classes/RealTimePlotsView.properties"));
+        } catch (Exception e) {
+
+        }
+
+
+        int messageTimeout = Integer.parseInt(resourceMap2.getProperty("StatusBar.messageTimeout"));
         messageTimer = new Timer(messageTimeout, new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -85,9 +87,16 @@ public class RealTimePlotsView extends FrameView {
             }
         });
         messageTimer.setRepeats(false);
-        int busyAnimationRate = resourceMap.getInteger("StatusBar.busyAnimationRate");
-        for (int i = 0; i < busyIcons.length; i++) {
-            busyIcons[i] = resourceMap.getIcon("StatusBar.busyIcons[" + i + "]");
+        int busyAnimationRate = Integer.parseInt(resourceMap2.getProperty("StatusBar.busyAnimationRate"));
+
+        try {
+            for (int i = 0; i < busyIcons.length; i++) {
+                System.out.println("busyicons" + i);
+                busyIcons[i] = new ImageIcon(resourceMap2.getProperty("StatusBar.busyIcons[" + i + "]"));
+            }
+        } catch (Exception e) {
+            System.out.println("cannot load image");
+
         }
         busyIconTimer = new Timer(busyAnimationRate, new ActionListener() {
 
@@ -96,8 +105,12 @@ public class RealTimePlotsView extends FrameView {
                 statusAnimationLabel.setIcon(busyIcons[busyIconIndex]);
             }
         });
-        idleIcon = resourceMap.getIcon("StatusBar.idleIcon");
+        System.out.println("idleicon");
+        idleIcon = new ImageIcon(resourceMap2.getProperty("StatusBar.idleIcon"));
         statusAnimationLabel.setIcon(idleIcon);
+
+        System.out.println("done here");
+
 
         messages_cl_series = new TimeSeries("CL Messages", Millisecond.class);
         messages_clr_series = new TimeSeries("CLR Messages", Millisecond.class);
@@ -113,18 +126,23 @@ public class RealTimePlotsView extends FrameView {
         application_flrl_series = new TimeSeries("Lamp Receive", Millisecond.class);
 
 
-
         logospanel = new JPanel();
         logospanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        //ImageIcon imageIcon = new ImageIcon(getClass().getResource("/experimentevaluatorq/fronts-logo.jpg"));
-        ImagePanel frontsLogo = new ImagePanel(new ImageIcon(getClass().getResource("/eu/wisebed/wiseViz/plots/fronts-logo.png")).getImage());
+//        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/experimentevaluatorq/fronts-logo.jpg"));
+        JLabel frontsLogo = new JLabel(new ImageIcon("classes/fronts-logo.png", ""));
+        System.out.println("done flogo");
+
         logospanel.add(frontsLogo);
         //ImageIcon imageIcon = new ImageIcon(getClass().getResource("/experimentevaluatorq/fronts-logo.jpg"));
-        ImagePanel gap = new ImagePanel(new ImageIcon(getClass().getResource("/eu/wisebed/wiseViz/plots/gap.png")).getImage());
+        JLabel gap = new JLabel(new ImageIcon("classes/gap.png", ""));
+        System.out.println("done gap");
+
         gap.setOpaque(true);
         logospanel.add(gap);
         //ImageIcon imageIcon_fet = new ImageIcon(getClass().getResource("/experimentevaluatorq/fetLogo.png"));
-        ImagePanel fetLogo = new ImagePanel(new ImageIcon(getClass().getResource("/eu/wisebed/wiseViz/plots/fetLogo.png")).getImage());
+        JLabel fetLogo = new JLabel(new ImageIcon("classes/fetLogo.png", ""));
+        System.out.println("done fetlogo");
+
         logospanel.add(fetLogo);
         logospanel.setOpaque(false);
         logospanel.setSize(200, 100);
@@ -141,15 +159,11 @@ public class RealTimePlotsView extends FrameView {
         inpanel.setOpaque(false);
 
 
-
-
         realtime.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
         realtime.add(inpanel);
 
         realtime.setUndecorated(true);
         realtime.show();
-
-
 
 
         JPanel frow = new JPanel();
@@ -193,8 +207,6 @@ public class RealTimePlotsView extends FrameView {
         application_chart = createChart(application_dataset, "Application Success Rate", "Time", "");
 
 
-
-
         messages_chpanel = new ChartPanel(messages_chart);
         events_chpanel = new ChartPanel(events_chart);
         clusters_chpanel = new ChartPanel(clusters_chart);
@@ -227,7 +239,6 @@ public class RealTimePlotsView extends FrameView {
 
         inpanel.add(frow);
         inpanel.add(srow);
-
 
 
         inpanel.add(logospanel);
@@ -263,9 +274,8 @@ public class RealTimePlotsView extends FrameView {
 
     /**
      * Creates a sample chart.
-     * 
-     * @param dataset  the dataset.
-     * 
+     *
+     * @param dataset the dataset.
      * @return A sample chart.
      */
     private JFreeChart createChart(final XYDataset dataset, String title, String xlabel, String ylabel) {
@@ -296,7 +306,8 @@ public class RealTimePlotsView extends FrameView {
         RealTimePlotsApp.getApplication().show(aboutBox);
     }
 
-    /** This method is called from within the constructor to
+    /**
+     * This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
      * always regenerated by the Form Editor.
@@ -321,12 +332,12 @@ public class RealTimePlotsView extends FrameView {
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+                mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 400, Short.MAX_VALUE)
         );
         mainPanelLayout.setVerticalGroup(
-            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 260, Short.MAX_VALUE)
+                mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 260, Short.MAX_VALUE)
         );
 
         menuBar.setName("menuBar"); // NOI18N
@@ -363,30 +374,31 @@ public class RealTimePlotsView extends FrameView {
         javax.swing.GroupLayout statusPanelLayout = new javax.swing.GroupLayout(statusPanel);
         statusPanel.setLayout(statusPanelLayout);
         statusPanelLayout.setHorizontalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(statusMessageLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
-                .addComponent(statusAnimationLabel)
-                .addContainerGap())
+                statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(statusPanelSeparator, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                        .addGroup(statusPanelLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(statusMessageLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
+                                .addComponent(statusAnimationLabel)
+                                .addContainerGap())
         );
         statusPanelLayout.setVerticalGroup(
-            statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(statusPanelLayout.createSequentialGroup()
-                .addComponent(statusPanelSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(statusMessageLabel)
-                    .addComponent(statusAnimationLabel))
-                .addGap(3, 3, 3))
+                statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(statusPanelLayout.createSequentialGroup()
+                                .addComponent(statusPanelSeparator, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(statusPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(statusMessageLabel)
+                                        .addComponent(statusAnimationLabel))
+                                .addGap(3, 3, 3))
         );
 
         setComponent(mainPanel);
         setMenuBar(menuBar);
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel mainPanel;
     private javax.swing.JMenuBar menuBar;
@@ -413,7 +425,9 @@ public class RealTimePlotsView extends FrameView {
                 node_id = 0;
                 head = false;
             }
-        };
+        }
+
+        ;
         private final RealTimePlotsView parent;
         node clusters_node_list[] = new node[40];
 
@@ -457,8 +471,6 @@ public class RealTimePlotsView extends FrameView {
                 for (int i = 0; i < 40; i++) {
                     clusters_node_list[i] = new node();
                 }
-
-
 
 
                 Millisecond m = new Millisecond(new Date());
@@ -546,7 +558,6 @@ public class RealTimePlotsView extends FrameView {
                                 String[] a = clpevent.split(";");
                                 int type = Integer.parseInt(a[2]);
                                 int nodeid = Integer.parseInt(a[1].substring(2), 16);
-
 
 
                                 if (type == 2) {
@@ -671,7 +682,9 @@ public class RealTimePlotsView extends FrameView {
         ContentPanel() {
             MediaTracker mt = new MediaTracker(this);
 
-            bgimage = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/eu/wisebed/wiseViz/plots/fet11.jpg"));
+            System.out.println("set bg image");
+            bgimage = Toolkit.getDefaultToolkit().getImage("classes/fet11.jpg");
+//            bgimage = Toolkit.getDefaultToolkit().getImage(getClass().getResource("classes/fet11.jpg"));
             //bgimage = Toolkit.getDefaultToolkit().getImage("/experimentevaluatorq/fet11.jpg");
             mt.addImage(bgimage, 0);
             try {
