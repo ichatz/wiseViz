@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics
+END
+Spring.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/Spring.java
+END
+Particle.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/Particle.java
+END
+Attraction.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/Attraction.java
+END
+ParticleSystem.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/ParticleSystem.java
+END
+RungeKuttaIntegrator.java
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/RungeKuttaIntegrator.java
+END
+Vector3D.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/Vector3D.java
+END
+EulerIntegrator.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/EulerIntegrator.java
+END
+ModifiedEulerIntegrator.java
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/ModifiedEulerIntegrator.java
+END
+Force.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/Force.java
+END
+Integrator.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/wisebed/!svn/ver/4677/wiselib/trunk/applications/fronts_unified_app/viz/lib/physics/src/traer/physics/Integrator.java
+END
