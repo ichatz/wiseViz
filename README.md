@@ -1,8 +1,8 @@
-WiseML
+WiseViz
 ======
 The repository contains the following packages:
 
- * WiseVIZ visualizer & plotter
+ * WiseViz visualizer & plotter
 
 
 Contact:
