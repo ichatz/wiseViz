@@ -1,0 +1,4 @@
+# path to trace file
+tracefile=/path/to/trace/file
+# time for sliding window plot
+window.size=120
