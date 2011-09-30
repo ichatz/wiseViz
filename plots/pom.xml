@@ -24,23 +24,23 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.1</version>
         </dependency>
-	<dependency>
-	  <groupId>jfree</groupId>
-	  <artifactId>jfreechart</artifactId>
-	  <version>1.0.0</version>
-	</dependency>
         <dependency>
-          <groupId>org.jdesktop</groupId>
-          <artifactId>appframework</artifactId>
-          <version>1.0.3</version>
-	</dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jdesktop</groupId>
+            <artifactId>appframework</artifactId>
+            <version>1.0.3</version>
+        </dependency>
     </dependencies>
     <build>
-	<resources>
-		<resource>
-			<directory>src/main/resources</directory>
-		</resource>
-	</resources>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -56,7 +56,7 @@
                 <executions>
                     <execution>
                         <configuration>
-                            <mainClass>wiseViz.plots.RealTimePlotsApp</mainClass>
+                            <mainClass>wiseViz.plots.PlotsMain</mainClass>
                         </configuration>
                         <goals>
                             <goal>one-jar</goal>
