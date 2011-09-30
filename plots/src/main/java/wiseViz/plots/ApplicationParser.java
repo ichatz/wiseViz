@@ -67,16 +67,17 @@ public class ApplicationParser extends AbstractParser {
             final String eventprefix = ApplicationPrefixes.get(i);
             if (thisLine.contains(eventprefix)) {
                 ApplicationCounters[i]++;
-                final Millisecond now = new Millisecond(new Date());
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
-                EventSeries[i].add(now, ApplicationCounters[i]);
             }
         }
-
+        for (int i = 0; i < ApplicationPrefixes.size(); i++) {
+            final Millisecond now = new Millisecond(new Date());
+            EventSeries[i].add(now, ApplicationCounters[i]);
+        }
 
     }
 

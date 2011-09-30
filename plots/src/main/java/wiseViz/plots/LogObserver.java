@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Observable;
 
+import static java.lang.System.exit;
+
 
 /**
  * Examines a log file and produces events for the Vizualizer.
@@ -33,7 +35,15 @@ public class LogObserver extends Observable implements Runnable {
      */
     public LogObserver(final String path, final int theDelay) throws Exception {
         super();
-        final FileReader fread = new FileReader(path);
+        FileReader fread = null;
+        try {
+            fread = new FileReader(path);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            exit(0);
+        }
         bread = new BufferedReader(fread);
         delay = theDelay;
     }

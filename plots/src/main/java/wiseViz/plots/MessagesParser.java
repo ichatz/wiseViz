@@ -67,17 +67,19 @@ public class MessagesParser extends AbstractParser {
             final String eventprefix = MessagesPrefixes.get(i);
             if (thisLine.contains(eventprefix)) {
                 MessagesCounters[i]++;
-                final Millisecond now = new Millisecond(new Date());
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
-                EventSeries[i].add(now, MessagesCounters[i]);
+
                 //log.info("Got an event!" + eventprefix + " Total of " + MessagesCounters[i]);
             }
         }
-
+        for (int i = 0; i < MessagesPrefixes.size(); i++) {
+            final Millisecond now = new Millisecond(new Date());
+            EventSeries[i].add(now, MessagesCounters[i]);
+        }
 
     }
 

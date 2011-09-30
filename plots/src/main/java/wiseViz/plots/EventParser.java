@@ -38,11 +38,8 @@ public class EventParser extends AbstractParser {
     private int windowSize;
 
     public EventParser(Dimension dim, int windowSize) {
-//        EventPrefixes.add("NB");
-//        EventPrefixes.add("CLP");
-        EventPrefixes.add("EM_E");
-        EventPrefixes.add("EM_L");
-
+        EventPrefixes.add("NB");
+        EventPrefixes.add("CLP");
 
         EventCounters = new int[EventPrefixes.size()];
         EventSeries = new TimeSeries[EventPrefixes.size()];
@@ -66,15 +63,20 @@ public class EventParser extends AbstractParser {
             final String eventprefix = EventPrefixes.get(i);
             if (thisLine.contains(eventprefix)) {
                 EventCounters[i]++;
-                final Millisecond now = new Millisecond(new Date());
+
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
-                EventSeries[i].add(now, EventCounters[i]);
+
                 log.info("Got an event!" + eventprefix + " Total of " + EventCounters[i]);
             }
+        }
+
+        for (int i = 0; i < EventPrefixes.size(); i++) {
+            final Millisecond now = new Millisecond(new Date());
+            EventSeries[i].add(now, EventCounters[i]);
         }
 
 

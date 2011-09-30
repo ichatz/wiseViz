@@ -66,8 +66,10 @@ public class ClustersParser extends AbstractParser {
 
             if (type == 2) {
                 set_head(nodeid);
+                log.info("added head");
             } else if (type != 0) {
                 set_simple(nodeid);
+                log.info("added simple");
             }
 
             final Millisecond now = new Millisecond(new Date());
@@ -77,6 +79,7 @@ public class ClustersParser extends AbstractParser {
                 e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             }
 
+            log.info("head:" + heads() + " simple:" + simples());
             if (heads() > 0) {
                 clusters_series.add(now, heads());
                 cluster_size_series.add(now, total() / heads());
@@ -96,6 +99,10 @@ public class ClustersParser extends AbstractParser {
             return;
         } else if (SimpleNodes.containsKey(id)) {
             SimpleNodes.remove(id);
+//            log.info("adding now:" + HeadNodes.size());
+            HeadNodes.put(id, 1);
+//            log.info("finished now:" + HeadNodes.size());
+        } else {
             HeadNodes.put(id, 1);
         }
     }
@@ -105,6 +112,8 @@ public class ClustersParser extends AbstractParser {
             return;
         } else if (HeadNodes.containsKey(id)) {
             HeadNodes.remove(id);
+            SimpleNodes.put(id, 1);
+        } else {
             SimpleNodes.put(id, 1);
         }
     }
