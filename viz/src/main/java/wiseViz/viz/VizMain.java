@@ -64,7 +64,7 @@ public class VizMain extends JFrame {
         //setSize(dim.width, dim.height);
         //setSize(1410, 864);
 //        setSize(dim.width, dim.height);
-        setSize(2096,768);
+        setSize(2096, 768);
 
         //setLocation(-1366,0);
 
@@ -103,7 +103,10 @@ public class VizMain extends JFrame {
             lproc.addObserver(new GKESecureLinks(panel));
             lproc.addObserver(new GKEClustering(panel));
             lproc.addObserver(new GKEAppMessages(panel));
-            lproc.addObserver(new GKEStatMessage(panel));	// WROC hack :]
+            lproc.addObserver(new GKEStatMessage(panel));    // WROC hack :]
+
+            //Adding a new observer example
+            //lproc.addObserver(new ExampleParser(panel));
 
 
             final Thread thr = new Thread(lproc);
@@ -120,7 +123,8 @@ public class VizMain extends JFrame {
      */
     public static void main(final String[] args) {
         // Initialize vizualizer
-        new VizMain(args[0], Integer.parseInt(args[1]), args[2]);
+            new VizMain(args[0], Integer.parseInt(args[1]), args[2]);
+
     }
 
 }
