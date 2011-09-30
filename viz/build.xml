@@ -7,9 +7,9 @@
     <property name="targetdir" value="${outdir}/bin"/>
 
 <!--    <property name="logfile" value="/home/amaxilatis/Documents/Dropbox/tr.assembly/scripts/trace2.out"/> -->
-    <property name="logfile" value="./trace2.out"/>
+    <property name="logfile" value="./trace.out"/>
     <property name="delay" value="1"/>
-    <property name="propfile" value="frontstestbed.properties.left"/>
+    <property name="propfile" value="./properties/template.properties"/>
 
     <path id="libraries">
         <fileset dir="${librarydir}">
@@ -57,13 +57,13 @@
         <jar destfile="${outdir}/fronts-viz.jar" basedir="${targetdir}">
             <manifest>
                 <attribute name="Built-By" value="FRONTS"/>
-                <attribute name="Main-Class" value="eu.fronts.unified.viz.VizMain"/>
+                <attribute name="Main-Class" value="wizeViz.viz.VizMain"/>
             </manifest>
         </jar>
     </target>
 
     <target name="run" depends="jar">
-        <java classname="eu.fronts.unified.viz.VizMain" fork="true">
+        <java classname="wizeViz.viz.VizMain" fork="true">
             <classpath>
                 <path refid="libraries"/>
                 <path location="${outdir}/fronts-viz.jar"/>
