@@ -12,6 +12,8 @@ import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
 
 import java.awt.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.Observable;
  */
 public class EventParser extends AbstractParser {
     private static Logger log = Logger.getLogger(PlotsMain.class);
+
 
     private List<String> EventPrefixes = new ArrayList<String>();
     private int[] EventCounters;
@@ -48,6 +51,7 @@ public class EventParser extends AbstractParser {
             EventSeries[i] = new TimeSeries(EventPrefixes.get(i), Millisecond.class);
             dataset.addSeries(EventSeries[i]);
         }
+
 
         width = (int) (dim.width * 0.45);
         height = (int) (dim.height * 0.35);
@@ -73,6 +77,7 @@ public class EventParser extends AbstractParser {
                 log.info("Got an event!" + eventprefix + " Total of " + EventCounters[i]);
             }
         }
+
 
         for (int i = 0; i < EventPrefixes.size(); i++) {
             final Millisecond now = new Millisecond(new Date());

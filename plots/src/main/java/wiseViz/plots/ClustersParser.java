@@ -28,6 +28,7 @@ public class ClustersParser extends AbstractParser {
     private TimeSeries clusters_series;
     private TimeSeries cluster_size_series;
 
+
     private TimeSeriesCollection dataset = new TimeSeriesCollection();
 
     private static String ClustersPrefix = "CLP";
@@ -73,6 +74,8 @@ public class ClustersParser extends AbstractParser {
             }
 
             final Millisecond now = new Millisecond(new Date());
+
+
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {

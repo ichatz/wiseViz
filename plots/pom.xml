@@ -4,7 +4,7 @@
     <groupId>wiseViz.plots</groupId>
     <artifactId>wisePlots</artifactId>
     <packaging>jar</packaging>
-    <version>0.21</version>
+    <version>0.32</version>
     <name>traceparser</name>
     <url>http://wisebed.eu</url>
     <dependencies>

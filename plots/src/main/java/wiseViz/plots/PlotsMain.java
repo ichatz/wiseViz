@@ -25,7 +25,7 @@ public class PlotsMain extends JFrame {
     private java.util.List<AbstractParser> Parsers = new ArrayList<AbstractParser>();
     private Properties properties;
 
-    public PlotsMain(final int delay, final String propertyFile) {
+    public PlotsMain(final String propertyFile) {
         super("wiseViz Plots");
 
         //logger configure
@@ -42,6 +42,7 @@ public class PlotsMain extends JFrame {
         final String path = properties.getProperty("tracefile");
         // get the sliding window size in seconds
         final int windowSize = Integer.parseInt(properties.getProperty("window.size", "60"));
+        final int delay = Integer.parseInt(properties.getProperty("parsing.delay", "1"));
 
 
         //Get Screen Size
@@ -95,14 +96,11 @@ public class PlotsMain extends JFrame {
      * Main method launching the application.
      */
     public static void main(String[] args) {
-        if (args.length >= 2) {
-            new PlotsMain(Integer.parseInt(args[0]), args[1]);
-        } else if (args.length == 1) {
-            new PlotsMain(Integer.parseInt(args[0]), "classes/plots.properties");
+        if (args.length >= 1) {
+            new PlotsMain(args[1]);
         } else {
-            log.error("Error while executing please provide:");
-            log.error("path , delay , propertyfile");
-            new PlotsMain(1, "classes/plots.properties");
+            log.error("Error while executing please provide: propertyfile");
+            new PlotsMain("classes/plots.properties");
         }
     }
 

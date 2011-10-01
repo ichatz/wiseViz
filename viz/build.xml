@@ -7,8 +7,8 @@
     <property name="targetdir" value="${outdir}/bin"/>
 
 <!--    <property name="logfile" value="/home/amaxilatis/Documents/Dropbox/tr.assembly/scripts/trace2.out"/> -->
-    <property name="logfile" value="./trace.out"/>
-    <property name="delay" value="1"/>
+    <property name="logfile" value="../traces/trace.1"/>
+    <property name="delay" value="50"/>
     <property name="propfile" value="./properties/template.properties"/>
 
     <path id="libraries">
