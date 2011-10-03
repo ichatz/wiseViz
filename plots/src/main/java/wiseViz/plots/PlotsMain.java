@@ -6,6 +6,7 @@ package wiseViz.plots;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import wiseViz.plots.parsers.*;
 
 import javax.swing.*;
 import java.awt.*;

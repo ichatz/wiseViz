@@ -1,4 +1,4 @@
-package wiseViz.plots;
+package wiseViz.plots.parsers;
 
 import org.jfree.chart.ChartPanel;
 

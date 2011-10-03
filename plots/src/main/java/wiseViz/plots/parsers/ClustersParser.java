@@ -1,4 +1,4 @@
-package wiseViz.plots;
+package wiseViz.plots.parsers;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
@@ -10,6 +10,7 @@ import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
+import wiseViz.plots.PlotsMain;
 
 import java.awt.*;
 import java.util.*;

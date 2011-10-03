@@ -1,4 +1,4 @@
-package wiseViz.plots;
+package wiseViz.plots.parsers;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
@@ -10,10 +10,9 @@ import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
+import wiseViz.plots.PlotsMain;
 
 import java.awt.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,12 +25,12 @@ import java.util.Observable;
  * Time: 2:58 PM
  * To change this template use File | Settings | File Templates.
  */
-public class EventParser extends AbstractParser {
+public class MessagesParser extends AbstractParser {
     private static Logger log = Logger.getLogger(PlotsMain.class);
 
 
-    private List<String> EventPrefixes = new ArrayList<String>();
-    private int[] EventCounters;
+    private List<String> MessagesPrefixes = new ArrayList<String>();
+    private int[] MessagesCounters;
 
     TimeSeriesCollection dataset = new TimeSeriesCollection();
 
@@ -40,18 +39,20 @@ public class EventParser extends AbstractParser {
     private int height;
     private int windowSize;
 
-    public EventParser(Dimension dim, int windowSize) {
-        EventPrefixes.add("NB");
-        EventPrefixes.add("CLP");
+    public MessagesParser(Dimension dim, int windowSize) {
+        MessagesPrefixes.add("CLS;");
+        MessagesPrefixes.add("CLRS;");
+        MessagesPrefixes.add("E2E;");
+        MessagesPrefixes.add("AGS;");
 
-        EventCounters = new int[EventPrefixes.size()];
-        EventSeries = new TimeSeries[EventPrefixes.size()];
-        for (int i = 0; i < EventPrefixes.size(); i++) {
-            EventCounters[i] = 0;
-            EventSeries[i] = new TimeSeries(EventPrefixes.get(i), Millisecond.class);
+
+        MessagesCounters = new int[MessagesPrefixes.size()];
+        EventSeries = new TimeSeries[MessagesPrefixes.size()];
+        for (int i = 0; i < MessagesPrefixes.size(); i++) {
+            MessagesCounters[i] = 0;
+            EventSeries[i] = new TimeSeries(MessagesPrefixes.get(i), Millisecond.class);
             dataset.addSeries(EventSeries[i]);
         }
-
 
         width = (int) (dim.width * 0.45);
         height = (int) (dim.height * 0.35);
@@ -63,33 +64,29 @@ public class EventParser extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        for (int i = 0; i < EventPrefixes.size(); i++) {
-            final String eventprefix = EventPrefixes.get(i);
+        for (int i = 0; i < MessagesPrefixes.size(); i++) {
+            final String eventprefix = MessagesPrefixes.get(i);
             if (thisLine.contains(eventprefix)) {
-                EventCounters[i]++;
-
+                MessagesCounters[i]++;
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
 
-                log.info("Got an event!" + eventprefix + " Total of " + EventCounters[i]);
+                //log.info("Got an event!" + eventprefix + " Total of " + MessagesCounters[i]);
             }
         }
-
-
-        for (int i = 0; i < EventPrefixes.size(); i++) {
+        for (int i = 0; i < MessagesPrefixes.size(); i++) {
             final Millisecond now = new Millisecond(new Date());
-            EventSeries[i].add(now, EventCounters[i]);
+            EventSeries[i].add(now, MessagesCounters[i]);
         }
-
 
     }
 
 
     ChartPanel getChart() {
-        ChartPanel cp = new ChartPanel(createChart(dataset, "Events", "Time", "# of Events"));
+        ChartPanel cp = new ChartPanel(createChart(dataset, "Messages", "Time", "# of Messages"));
         cp.setPreferredSize(new Dimension(width, height));
         return cp;
     }

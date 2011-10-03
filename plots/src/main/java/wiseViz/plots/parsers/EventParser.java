@@ -1,4 +1,4 @@
-package wiseViz.plots;
+package wiseViz.plots.parsers;
 
 import org.apache.log4j.Logger;
 import org.jfree.chart.ChartFactory;
@@ -10,8 +10,12 @@ import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
+import wiseViz.plots.PlotsMain;
+import wiseViz.plots.parsers.AbstractParser;
 
 import java.awt.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,12 +28,12 @@ import java.util.Observable;
  * Time: 2:58 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ApplicationParser extends AbstractParser {
+public class EventParser extends AbstractParser {
     private static Logger log = Logger.getLogger(PlotsMain.class);
 
 
-    private List<String> ApplicationPrefixes = new ArrayList<String>();
-    private int[] ApplicationCounters;
+    private List<String> EventPrefixes = new ArrayList<String>();
+    private int[] EventCounters;
 
     TimeSeriesCollection dataset = new TimeSeriesCollection();
 
@@ -38,20 +42,18 @@ public class ApplicationParser extends AbstractParser {
     private int height;
     private int windowSize;
 
-    public ApplicationParser(Dimension dim, int windowSize) {
-        ApplicationPrefixes.add("FLS:lamp"); //send to lamp
-        ApplicationPrefixes.add("FLS:fan"); //send to fan
-        ApplicationPrefixes.add("FLR:lamp"); //lamp received
-        ApplicationPrefixes.add("FLR:fan"); //fan received
+    public EventParser(Dimension dim, int windowSize) {
+        EventPrefixes.add("NB");
+        EventPrefixes.add("CLP");
 
-
-        ApplicationCounters = new int[ApplicationPrefixes.size()];
-        EventSeries = new TimeSeries[ApplicationPrefixes.size()];
-        for (int i = 0; i < ApplicationPrefixes.size(); i++) {
-            ApplicationCounters[i] = 0;
-            EventSeries[i] = new TimeSeries(ApplicationPrefixes.get(i), Millisecond.class);
+        EventCounters = new int[EventPrefixes.size()];
+        EventSeries = new TimeSeries[EventPrefixes.size()];
+        for (int i = 0; i < EventPrefixes.size(); i++) {
+            EventCounters[i] = 0;
+            EventSeries[i] = new TimeSeries(EventPrefixes.get(i), Millisecond.class);
             dataset.addSeries(EventSeries[i]);
         }
+
 
         width = (int) (dim.width * 0.45);
         height = (int) (dim.height * 0.35);
@@ -63,27 +65,33 @@ public class ApplicationParser extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        for (int i = 0; i < ApplicationPrefixes.size(); i++) {
-            final String eventprefix = ApplicationPrefixes.get(i);
+        for (int i = 0; i < EventPrefixes.size(); i++) {
+            final String eventprefix = EventPrefixes.get(i);
             if (thisLine.contains(eventprefix)) {
-                ApplicationCounters[i]++;
+                EventCounters[i]++;
+
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
+
+                log.info("Got an event!" + eventprefix + " Total of " + EventCounters[i]);
             }
         }
-        for (int i = 0; i < ApplicationPrefixes.size(); i++) {
+
+
+        for (int i = 0; i < EventPrefixes.size(); i++) {
             final Millisecond now = new Millisecond(new Date());
-            EventSeries[i].add(now, ApplicationCounters[i]);
+            EventSeries[i].add(now, EventCounters[i]);
         }
+
 
     }
 
 
     ChartPanel getChart() {
-        ChartPanel cp = new ChartPanel(createChart(dataset, "Application", "Time", "# of Application"));
+        ChartPanel cp = new ChartPanel(createChart(dataset, "Events", "Time", "# of Events"));
         cp.setPreferredSize(new Dimension(width, height));
         return cp;
     }
