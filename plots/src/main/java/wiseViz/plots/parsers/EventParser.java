@@ -29,18 +29,18 @@ import java.util.Observable;
  * To change this template use File | Settings | File Templates.
  */
 public class EventParser extends AbstractParser {
-    private static Logger log = Logger.getLogger(PlotsMain.class);
+    private static final Logger log = Logger.getLogger(PlotsMain.class);
 
 
-    private List<String> EventPrefixes = new ArrayList<String>();
-    private int[] EventCounters;
+    private final List<String> EventPrefixes = new ArrayList<String>();
+    private final int[] EventCounters;
 
-    TimeSeriesCollection dataset = new TimeSeriesCollection();
+    private final TimeSeriesCollection dataset = new TimeSeriesCollection();
 
-    private TimeSeries[] EventSeries;
-    private int width;
-    private int height;
-    private int windowSize;
+    private final TimeSeries[] EventSeries;
+    private final int width;
+    private final int height;
+    private final int windowSize;
 
     public EventParser(Dimension dim, int windowSize) {
         EventPrefixes.add("NB");
@@ -91,7 +91,7 @@ public class EventParser extends AbstractParser {
 
 
     public ChartPanel getChart() {
-        ChartPanel cp = new ChartPanel(createChart(dataset, "Events", "Time", "# of Events"));
+        ChartPanel cp = new ChartPanel(createChart());
         cp.setPreferredSize(new Dimension(width, height));
         return cp;
     }
@@ -100,14 +100,13 @@ public class EventParser extends AbstractParser {
     /**
      * Creates a sample chart.
      *
-     * @param dataset the dataset.
      * @return A sample chart.
      */
-    private JFreeChart createChart(final XYDataset dataset, String title, String xlabel, String ylabel) {
+    private JFreeChart createChart() {
         final JFreeChart result = ChartFactory.createTimeSeriesChart(
-                title,
-                xlabel,
-                ylabel,
+                "Events",
+                "Time",
+                "# of Events",
                 dataset,
                 true,
                 true,

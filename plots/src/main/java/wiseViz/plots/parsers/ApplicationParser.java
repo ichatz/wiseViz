@@ -9,7 +9,6 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.Millisecond;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.XYDataset;
 import wiseViz.plots.PlotsMain;
 
 import java.awt.*;
@@ -29,15 +28,15 @@ public class ApplicationParser extends AbstractParser {
     private static Logger log = Logger.getLogger(PlotsMain.class);
 
 
-    private List<String> ApplicationPrefixes = new ArrayList<String>();
-    private int[] ApplicationCounters;
+    private final List<String> ApplicationPrefixes = new ArrayList<String>();
+    private final int[] ApplicationCounters;
 
-    TimeSeriesCollection dataset = new TimeSeriesCollection();
+    private final TimeSeriesCollection dataset = new TimeSeriesCollection();
 
-    private TimeSeries[] EventSeries;
-    private int width;
-    private int height;
-    private int windowSize;
+    private final TimeSeries[] EventSeries;
+    private final int width;
+    private final int height;
+    private final int windowSize;
 
     public ApplicationParser(Dimension dim, int windowSize) {
         ApplicationPrefixes.add("FLS:lamp"); //send to lamp
@@ -84,7 +83,7 @@ public class ApplicationParser extends AbstractParser {
 
 
     public ChartPanel getChart() {
-        ChartPanel cp = new ChartPanel(createChart(dataset, "Application", "Time", "# of Application"));
+        ChartPanel cp = new ChartPanel(createChart());
         cp.setPreferredSize(new Dimension(width, height));
         return cp;
     }
@@ -93,14 +92,13 @@ public class ApplicationParser extends AbstractParser {
     /**
      * Creates a sample chart.
      *
-     * @param dataset the dataset.
      * @return A sample chart.
      */
-    private JFreeChart createChart(final XYDataset dataset, String title, String xlabel, String ylabel) {
+    private JFreeChart createChart() {
         final JFreeChart result = ChartFactory.createTimeSeriesChart(
-                title,
-                xlabel,
-                ylabel,
+                "Application",
+                "Time",
+                "# of Application",
                 dataset,
                 true,
                 true,

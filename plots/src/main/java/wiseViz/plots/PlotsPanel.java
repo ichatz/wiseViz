@@ -14,17 +14,15 @@ import java.util.List;
  * Time: 2:08 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PlotsPanel extends JPanel {
+class PlotsPanel extends JPanel {
     private static Logger log = Logger.getLogger(PlotsMain.class);
 
-    private JPanel plotspanel;
-    private JPanel logospanel;
-
-    int height;
-    int width;
+    private final int height;
+    private final int width;
 
     /**
      * Default constructor.
+     * @param dim the dimension of the main window
      */
     @SuppressWarnings("unchecked")
     public PlotsPanel(Dimension dim) {
@@ -46,8 +44,8 @@ public class PlotsPanel extends JPanel {
 
         } else if (parsers.size() < 3) {
 
-            for (int i = 0; i < parsers.size(); i++) {
-                frow.add(parsers.get(i).getChart());
+            for (AbstractParser parser : parsers) {
+                frow.add(parser.getChart());
             }
         } else if (parsers.size() < 5) {
 

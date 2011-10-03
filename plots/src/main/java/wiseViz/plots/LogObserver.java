@@ -12,8 +12,8 @@ import static java.lang.System.exit;
 /**
  * Examines a log file and produces events for the Vizualizer.
  */
-public class LogObserver extends Observable implements Runnable {
-    private static Logger log = Logger.getLogger(PlotsMain.class);
+class LogObserver extends Observable implements Runnable {
+    private static final Logger log = Logger.getLogger(PlotsMain.class);
 
 
     /**
@@ -24,16 +24,15 @@ public class LogObserver extends Observable implements Runnable {
     /**
      * the delay in milliseconds after processing a trace line.
      */
-    private int delay;
+    private final int delay;
 
     /**
      * Default constructor.
      *
      * @param path     the filename to parse.
      * @param theDelay the delay in milliseconds after processing a trace line.
-     * @throws Exception in case an error occurred while trying to open the trace file.
      */
-    public LogObserver(final String path, final int theDelay) throws Exception {
+    public LogObserver(final String path, final int theDelay) {
         super();
         FileReader fread = null;
         try {

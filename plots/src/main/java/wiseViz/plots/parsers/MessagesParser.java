@@ -29,15 +29,15 @@ public class MessagesParser extends AbstractParser {
     private static Logger log = Logger.getLogger(PlotsMain.class);
 
 
-    private List<String> MessagesPrefixes = new ArrayList<String>();
-    private int[] MessagesCounters;
+    private final List<String> MessagesPrefixes = new ArrayList<String>();
+    private final int[] MessagesCounters;
 
-    TimeSeriesCollection dataset = new TimeSeriesCollection();
+    private final TimeSeriesCollection dataset = new TimeSeriesCollection();
 
-    private TimeSeries[] EventSeries;
-    private int width;
-    private int height;
-    private int windowSize;
+    private final TimeSeries[] EventSeries;
+    private final int width;
+    private final int height;
+    private final int windowSize;
 
     public MessagesParser(Dimension dim, int windowSize) {
         MessagesPrefixes.add("CLS;");
@@ -86,7 +86,7 @@ public class MessagesParser extends AbstractParser {
 
 
     public ChartPanel getChart() {
-        ChartPanel cp = new ChartPanel(createChart(dataset, "Messages", "Time", "# of Messages"));
+        ChartPanel cp = new ChartPanel(createChart());
         cp.setPreferredSize(new Dimension(width, height));
         return cp;
     }
@@ -95,14 +95,13 @@ public class MessagesParser extends AbstractParser {
     /**
      * Creates a sample chart.
      *
-     * @param dataset the dataset.
      * @return A sample chart.
      */
-    private JFreeChart createChart(final XYDataset dataset, String title, String xlabel, String ylabel) {
+    private JFreeChart createChart() {
         final JFreeChart result = ChartFactory.createTimeSeriesChart(
-                title,
-                xlabel,
-                ylabel,
+                "Messages",
+                "Time",
+                "# of Messages",
                 dataset,
                 true,
                 true,

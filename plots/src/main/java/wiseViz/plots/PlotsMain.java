@@ -20,13 +20,13 @@ import java.util.Properties;
  */
 public class PlotsMain extends JFrame {
 
-    private static Logger log = Logger.getLogger(PlotsMain.class);
+    private static final Logger log = Logger.getLogger(PlotsMain.class);
 
     private ContentPanel cp;
-    private java.util.List<AbstractParser> Parsers = new ArrayList<AbstractParser>();
-    private Properties properties;
+    private final java.util.List<AbstractParser> Parsers = new ArrayList<AbstractParser>();
+    private final Properties properties;
 
-    public PlotsMain(final String propertyFile) {
+    private PlotsMain(final String propertyFile) {
         super("wiseViz Plots");
 
         //logger configure
@@ -82,8 +82,8 @@ public class PlotsMain extends JFrame {
         try {
             final LogObserver lproc = new LogObserver(path, delay);
 
-            for (int i = 0; i < Parsers.size(); i++) {
-                lproc.addObserver(Parsers.get(i));
+            for (AbstractParser Parser : Parsers) {
+                lproc.addObserver(Parser);
             }
             final Thread thr = new Thread(lproc);
             thr.start();
@@ -95,6 +95,7 @@ public class PlotsMain extends JFrame {
 
     /**
      * Main method launching the application.
+     * @param args user provided arguments
      */
     public static void main(String[] args) {
         if (args.length >= 1) {
@@ -133,7 +134,7 @@ public class PlotsMain extends JFrame {
 
     class ImagePanel extends JPanel {
 
-        private Image img;
+        private final Image img;
 
         public ImagePanel(String img) {
             this(new ImageIcon(img).getImage());

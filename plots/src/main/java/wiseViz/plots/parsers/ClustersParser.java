@@ -24,21 +24,21 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ClustersParser extends AbstractParser {
-    private static Logger log = Logger.getLogger(PlotsMain.class);
+    private static final Logger log = Logger.getLogger(PlotsMain.class);
 
-    private TimeSeries clusters_series;
-    private TimeSeries cluster_size_series;
+    private final TimeSeries clusters_series;
+    private final TimeSeries cluster_size_series;
 
 
-    private TimeSeriesCollection dataset = new TimeSeriesCollection();
+    private final TimeSeriesCollection dataset = new TimeSeriesCollection();
 
-    private static String ClustersPrefix = "CLP";
+    private static final String ClustersPrefix = "CLP";
 
-    private HashMap<Integer, Integer> HeadNodes = new HashMap<Integer, Integer>();
-    private HashMap<Integer, Integer> SimpleNodes = new HashMap<Integer, Integer>();
-    private int width;
-    private int height;
-    private int windowSize;
+    private final HashMap<Integer, Integer> HeadNodes = new HashMap<Integer, Integer>();
+    private final HashMap<Integer, Integer> SimpleNodes = new HashMap<Integer, Integer>();
+    private final int width;
+    private final int height;
+    private final int windowSize;
 
     public ClustersParser(Dimension dim, int windowSize) {
         clusters_series = new TimeSeries("Clusters", Millisecond.class);
@@ -100,7 +100,6 @@ public class ClustersParser extends AbstractParser {
 
     private void set_head(int id) {
         if (HeadNodes.containsKey(id)) {
-            return;
         } else if (SimpleNodes.containsKey(id)) {
             SimpleNodes.remove(id);
 //            log.info("adding now:" + HeadNodes.size());
@@ -113,7 +112,6 @@ public class ClustersParser extends AbstractParser {
 
     private void set_simple(int id) {
         if (SimpleNodes.containsKey(id)) {
-            return;
         } else if (HeadNodes.containsKey(id)) {
             HeadNodes.remove(id);
             SimpleNodes.put(id, 1);
@@ -137,7 +135,7 @@ public class ClustersParser extends AbstractParser {
 
 
     public ChartPanel getChart() {
-        ChartPanel cp = new ChartPanel(createChart(dataset, "Clusters", "Time", "# of Nodes"));
+        ChartPanel cp = new ChartPanel(createChart());
         cp.setPreferredSize(new Dimension(width, height));
         return cp;
     }
@@ -146,14 +144,13 @@ public class ClustersParser extends AbstractParser {
     /**
      * Creates a sample chart.
      *
-     * @param dataset the dataset.
      * @return A sample chart.
      */
-    private JFreeChart createChart(final XYDataset dataset, String title, String xlabel, String ylabel) {
+    private JFreeChart createChart() {
         final JFreeChart result = ChartFactory.createTimeSeriesChart(
-                title,
-                xlabel,
-                ylabel,
+                 "Clusters",
+                "Time",
+                "# of Nodes",
                 dataset,
                 true,
                 true,

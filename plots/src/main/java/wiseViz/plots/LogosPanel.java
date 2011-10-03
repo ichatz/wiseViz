@@ -12,8 +12,8 @@ import java.awt.*;
  * Time: 2:41 PM
  * To change this template use File | Settings | File Templates.
  */
-public class LogosPanel extends JPanel {
-    private static Logger log = Logger.getLogger(PlotsMain.class);
+class LogosPanel extends JPanel {
+    private static final Logger log = Logger.getLogger(PlotsMain.class);
 
 
     public LogosPanel() {
