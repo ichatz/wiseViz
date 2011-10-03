@@ -90,7 +90,7 @@ public class EventParser extends AbstractParser {
     }
 
 
-    ChartPanel getChart() {
+    public ChartPanel getChart() {
         ChartPanel cp = new ChartPanel(createChart(dataset, "Events", "Time", "# of Events"));
         cp.setPreferredSize(new Dimension(width, height));
         return cp;

@@ -83,7 +83,7 @@ public class ApplicationParser extends AbstractParser {
     }
 
 
-    ChartPanel getChart() {
+    public ChartPanel getChart() {
         ChartPanel cp = new ChartPanel(createChart(dataset, "Application", "Time", "# of Application"));
         cp.setPreferredSize(new Dimension(width, height));
         return cp;

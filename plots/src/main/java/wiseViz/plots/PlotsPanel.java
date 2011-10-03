@@ -1,6 +1,7 @@
 package wiseViz.plots;
 
 import org.apache.log4j.Logger;
+import wiseViz.plots.parsers.AbstractParser;
 
 import javax.swing.*;
 import java.awt.*;

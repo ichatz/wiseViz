@@ -14,5 +14,5 @@ import java.util.Observer;
 public abstract class AbstractParser implements Observer {
 
 
-    abstract ChartPanel getChart();
+    public abstract ChartPanel getChart();
 }

@@ -136,7 +136,7 @@ public class ClustersParser extends AbstractParser {
     }
 
 
-    ChartPanel getChart() {
+    public ChartPanel getChart() {
         ChartPanel cp = new ChartPanel(createChart(dataset, "Clusters", "Time", "# of Nodes"));
         cp.setPreferredSize(new Dimension(width, height));
         return cp;

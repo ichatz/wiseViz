@@ -85,7 +85,7 @@ public class MessagesParser extends AbstractParser {
     }
 
 
-    ChartPanel getChart() {
+    public ChartPanel getChart() {
         ChartPanel cp = new ChartPanel(createChart(dataset, "Messages", "Time", "# of Messages"));
         cp.setPreferredSize(new Dimension(width, height));
         return cp;
