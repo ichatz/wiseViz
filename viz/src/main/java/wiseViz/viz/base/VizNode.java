@@ -106,6 +106,10 @@ public class VizNode {
      * The sensor value.
      */
     private String sensorValue;
+    /**
+     * The semantic groups.
+     */
+    private HashMap<String, String> semanticGroups;
 
     /**
      * The sensor value.
@@ -168,6 +172,7 @@ public class VizNode {
         alphaInt = 150;
         alphaStroke = 250;
         sensorValue = "";
+        semanticGroups = new HashMap<String, String>();
         aggregatedValue = "";
         isEnabled = true;
         bufferSize = 0;
@@ -294,6 +299,12 @@ public class VizNode {
 
     public void setSensorValue(final String value) {
         this.sensorValue = value;
+    }
+
+    public void addSemanticGroup(final String group, final String gparent) {
+        final String semantic = group.substring(0, group.indexOf("-"));
+        final String groupid = group.substring(group.indexOf("-"));
+        this.semanticGroups.put(semantic, groupid + ":" + gparent);
     }
 
     public void setAggregatedValue(final String value) {
@@ -423,6 +434,7 @@ public class VizNode {
     public void sendPacket(final VizLink thisLink, final int type, final int length, final VizNode src, final VizNode tgt) {
         sendPacket(thisLink, type, length, null, src, tgt);
     }
+
     /**
      * Draw the node.
      */
@@ -469,6 +481,19 @@ public class VizNode {
         parent.textSize(16);
         parent.textAlign(PApplet.LEFT);
         parent.text(sensorValue, nodeWidth - 30, 16);
+
+        if (!semanticGroups.isEmpty()) {
+            String totalsems = "";
+            for (String sems : semanticGroups.keySet()) {
+                totalsems += (sems + semanticGroups.get(sems) + "\n");
+
+            }
+            parent.textSize(12);
+            parent.textAlign(PApplet.LEFT);
+            parent.text(totalsems, nodeWidth - 30, 16);
+//            }
+        }
+
 
         parent.fill(Color.GREEN.getRGB(), 255);
         parent.textSize(16);
@@ -623,6 +648,7 @@ public class VizNode {
 
     /**
      * Reset the counters when a new transmit event is fired.
+     *
      * @param contents the contents of the packet.
      */
     public void bcastEvent(final int color, final int length, final String contents) {

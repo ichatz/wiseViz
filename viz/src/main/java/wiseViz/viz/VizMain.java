@@ -104,6 +104,7 @@ public class VizMain extends JFrame {
             lproc.addObserver(new GKEClustering(panel));
             lproc.addObserver(new GKEAppMessages(panel));
             lproc.addObserver(new GKEStatMessage(panel));    // WROC hack :]
+            lproc.addObserver(new SemanticGroupsParser(panel));    // WROC hack :]
 
             //Adding a new observer example
             //lproc.addObserver(new ExampleParser(panel));
