@@ -60,7 +60,7 @@ public abstract class AbstractParser implements Observer {
             // already exists
             node = parent.getNode(nodeId);
 
-            parent.setupArduinoLinks(node);
+            //parent.setupArduinoLinks(node);
 
         } else {
             final int totNodes = parent.getNodesSize();
