@@ -1,4 +1,4 @@
-<project name="FRONTS Viz" default="compile">
+<project name="WiseViz" default="compile">
 
     <property name="sourcedir" value="${basedir}/src"/>
     <property name="librarydir" value="${basedir}/lib"/>
@@ -54,19 +54,31 @@
     </target>
 
     <target name="jar" depends="compile" description="create jar">
-        <jar destfile="${outdir}/fronts-viz.jar" basedir="${targetdir}">
+        <jar destfile="${outdir}/wiseViz.jar" basedir="${targetdir}">
             <manifest>
                 <attribute name="Built-By" value="FRONTS"/>
-                <attribute name="Main-Class" value="wizeViz.viz.VizMain"/>
+                <attribute name="Main-Class" value="wizeViz.viz.VizFRONTS"/>
             </manifest>
         </jar>
     </target>
 
-    <target name="run" depends="jar">
-        <java classname="wizeViz.viz.VizMain" fork="true">
+    <target name="runFRONTS" depends="jar">
+        <java classname="wizeViz.viz.VizFRONTS" fork="true">
             <classpath>
                 <path refid="libraries"/>
-                <path location="${outdir}/fronts-viz.jar"/>
+                <path location="${outdir}/wiseViz.jar"/>
+            </classpath>
+            <arg value="${logfile}"/>
+            <arg value="${delay}"/>
+            <arg value="${propfile}"/>
+        </java>
+    </target>
+
+    <target name="runRPL" depends="jar">
+        <java classname="wizeViz.viz.VizRPL" fork="true">
+            <classpath>
+                <path refid="libraries"/>
+                <path location="${outdir}/wiseViz.jar"/>
             </classpath>
             <arg value="${logfile}"/>
             <arg value="${delay}"/>

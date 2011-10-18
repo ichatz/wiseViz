@@ -45,14 +45,6 @@ public abstract class AbstractParser implements Observer {
             return null;
         }
 
-        if ((strNodeId.toLowerCase().contains("0x4d78"))
-                || (strNodeId.toLowerCase().contains("0x5eef"))
-                || (strNodeId.toLowerCase().contains("0x55c7"))) {
-            // Broadcast destination address
-            // ignore
-            return null;
-        }
-
         // Check if this node is already displayed
         final int nodeId = convertNodeId(strNodeId);
 

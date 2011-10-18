@@ -122,11 +122,6 @@ public final class VizPanel extends PApplet {
 
     private boolean enableCam = false;
 
-    /**
-     * Camera image.
-     */
-    private PImage camera;
-
     private int selectedNodePos;
 
     private int selectedArduinoPos;
@@ -192,8 +187,6 @@ public final class VizPanel extends PApplet {
         // Set the default font
         textFont(font, 255);
         textSize(16);
-
-        camera = null;
 
         // Setup Background image
         setupBGMap();
@@ -262,11 +255,6 @@ public final class VizPanel extends PApplet {
 
         // Draw the network elements
         drawNetwork();
-
-        // draw camera effects
-        if (enableCam) {
-            image(camera, 0, 0);
-        }
     }
 
     /**
@@ -349,12 +337,6 @@ public final class VizPanel extends PApplet {
         }
     }
 
-    public void setCamera(final PImage camera) {
-        synchronized (this) {
-            this.camera = camera;
-        }
-    }
-
     /**
      * Adds a new node in the network.
      *
@@ -393,14 +375,14 @@ public final class VizPanel extends PApplet {
 
         //setupArduinoLinks(node);
 
-        synchronized (timer) {
-            try {
-                timer.scheduleAtFixedRate(new NodeTransmitEvent(node), 0, FLUSH_ND_MOD + ((int) random(100)));
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-        }
+//        synchronized (timer) {
+//            try {
+//                timer.scheduleAtFixedRate(new NodeTransmitEvent(node), 0, FLUSH_ND_MOD + ((int) random(100)));
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//
+//        }
 
         node.bcastEvent();
         return node;

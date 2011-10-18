@@ -1,7 +1,7 @@
 package wizeViz.viz;
 
 import wizeViz.viz.base.VizPanel;
-import wizeViz.viz.parsers.*;
+import wizeViz.viz.parsers.fronts.*;
 
 import javax.swing.*;
 import java.awt.*;

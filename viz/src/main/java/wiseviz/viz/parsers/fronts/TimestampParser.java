@@ -11,7 +11,9 @@ import java.util.Observable;
 /**
  * Parses the timestamps of the traces.
  */
-public class TimestampParser extends AbstractParser {
+
+public class TimestampParser
+        extends AbstractParser {
 
     private final String TIME_TAG_START = "Time [";
 
@@ -78,3 +80,5 @@ public class TimestampParser extends AbstractParser {
     }
 
 }
+
+
