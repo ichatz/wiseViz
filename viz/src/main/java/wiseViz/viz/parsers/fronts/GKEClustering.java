@@ -1,26 +1,30 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
+import java.awt.*;
 import java.util.Observable;
 import java.util.StringTokenizer;
 
 /**
- * Parses the trace file entries that relate to the Aggregation module.
+ * Visualizes the final stages of GKE.
  */
-public class SemanticGroupsParser extends AbstractParser {
+public class GKEClustering extends AbstractParser {
 
-    private final String SENSOR_VAL = "CLL";
+    private final String MSG = "GKE;";
+    private final String MSG_LEADER = "GKE_LEADER;";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public SemanticGroupsParser(final VizPanel vPanel) {
+    public GKEClustering(final VizPanel vPanel) {
         super(vPanel);
     }
+
 
     /**
      * This method is called whenever the observed object is changed. An
@@ -36,30 +40,21 @@ public class SemanticGroupsParser extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        if (thisLine.indexOf(SENSOR_VAL) < 0) {
+        if (thisLine.indexOf(MSG) < 0 && thisLine.indexOf(MSG_LEADER) < 0) {
             return;
         }
 
-        final String fromNodeId = extractNodeUrn(line);
-
         final StringTokenizer stok = new StringTokenizer(thisLine, ";");
-
         stok.nextToken();
-        stok.nextToken();
-
-        final String value = stok.nextToken();
-        final String gparent = stok.nextToken();
+        final String fromNodeId = stok.nextToken();
 
         final VizNode fromNode = displayNode(fromNodeId);
-        System.out.println("" + fromNodeId + " has sema " + value);
 
         // Check if node should be ignored
         if (fromNode == null) {
             return;
         }
 
-        fromNode.addSemanticGroup(value, gparent);
+        fromNode.setColorInt(Color.GREEN.getRGB());
     }
-
 }
-

@@ -1,6 +1,7 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

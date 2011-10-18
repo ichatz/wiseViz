@@ -1,8 +1,9 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizLink;
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
 import java.awt.*;
 import java.util.Observable;
@@ -11,16 +12,16 @@ import java.util.StringTokenizer;
 /**
  * Parses the trace file entries that relate to the high-level Application.
  */
-public class AppRadioMessages extends AbstractParser {
+public class AppRadioReceiveMessages extends AbstractParser {
 
-    private final String APP_RADIO_SEND = "FLS";
+    private final String APP_RADIO_SEND = "FLR";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public AppRadioMessages(final VizPanel vPanel) {
+    public AppRadioReceiveMessages(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -45,13 +46,21 @@ public class AppRadioMessages extends AbstractParser {
         final StringTokenizer stok = new StringTokenizer(thisLine, ":");
         stok.nextToken();
         final String type = stok.nextToken();
-        final String param = stok.nextToken();
 
-        final VizNode fromNode = parent.getArduinoNode(0);
-        final VizNode toNode = displayNode("0x017a");
+        VizNode toNode;
+        int nodeId = 0;
+        if (type.equals("fan")) {
+            toNode = displayNode("0x6cb5");
+            nodeId = 2;
+        } else {
+            toNode = displayNode("0x8931");
+            nodeId = 1;
+        }
+
+        final VizNode fromNode = displayNode(extractNodeUrn(line));
 
         if ((fromNode != null) && (toNode != null)) {
-            final VizLink linkFwd = fromNode.getLink(toNode.getId());
+            final VizLink linkFwd = fromNode.getLink(nodeId);
             final VizLink linkRev = toNode.getLink(fromNode.getId());
 
             int color = 0, width = 0;
@@ -69,6 +78,4 @@ public class AppRadioMessages extends AbstractParser {
             }
         }
     }
-
-
 }

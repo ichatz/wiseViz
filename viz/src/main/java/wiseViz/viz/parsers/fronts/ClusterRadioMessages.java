@@ -1,26 +1,27 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizLink;
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
+import java.awt.*;
 import java.util.Observable;
 import java.util.StringTokenizer;
 
 /**
- * Visualizing Secure Links.
+ * Parses the trace file entries that relate to the Clustering module.
  */
-public class GKESecureLinks extends AbstractParser {
+public class ClusterRadioMessages extends AbstractParser {
 
-    private final String GKE_SL_SEND = "GKE_SL";
-    private static int cnt = 0;
+    private final String CLUSTER_RADIO_SEND = "CLRS";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public GKESecureLinks(final VizPanel vPanel) {
+    public ClusterRadioMessages(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -38,50 +39,63 @@ public class GKESecureLinks extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        if (thisLine.indexOf(GKE_SL_SEND) < 0) {
+        if (thisLine.indexOf(CLUSTER_RADIO_SEND) < 0) {
             return;
         }
 
-	cnt++;
-	
         final StringTokenizer stok = new StringTokenizer(thisLine, ";");
         stok.nextToken();
         final String fromNodeId = stok.nextToken();
+        final String msgType = stok.nextToken();
         final String toNodeId = stok.nextToken();
-        final String keyID = stok.nextToken();
+        final String payload = stok.nextToken();
 
         final VizNode fromNode = displayNode(fromNodeId);
         final VizNode toNode = displayNode(toNodeId);
-        
-        if(cnt%2 == 1) {
-	       	final VizLink linkNew = displayLink(fromNode, toNode, VizLink.LINK_SL);
-	}
 
-
-/*
         if ((fromNode != null) && (toNode != null)) {
             final VizLink linkFwd = fromNode.getLink(toNode.getId());
             final VizLink linkRev = toNode.getLink(fromNode.getId());
 
+            int color = 0, width = 0;
+            if (payload.equals("0x70")) {
+                // control - RRQ
+                color = Color.MAGENTA.getRGB();
+                width = 2;
+
+            } else if (payload.equals("0x71")) {
+                // control - RPL
+                color = Color.MAGENTA.getRGB();
+                width = 2;
+
+            } else if (payload.equals("0x6f")) {
+                // data
+                color = Color.RED.getRGB();
+                width = 20;
+            }
+
             if (linkFwd != null) {
                 // enforce link  bidirectionallity
-                linkFwd.setType(VizLink.LINK_SL);
+                linkFwd.setType(VizLink.LINK_BI);
                 linkFwd.setEnabled(true);
-                linkFwd.setKey(Integer.valueOf(keyID));
+
+                fromNode.ucastEvent();
+                fromNode.sendPacket(linkFwd, color, width, fromNode, toNode);
 
             } else if (linkRev != null) {
                 // enforce link  bidirectionallity
-                linkRev.setType(VizLink.LINK_SL);
+                linkRev.setType(VizLink.LINK_BI);
                 linkRev.setEnabled(true);
-                linkRev.setKey(Integer.valueOf(keyID));
-	    }
-            else {
-            	System.out.println("secure link: (" + fromNodeId + ", " + toNodeId + ") with key " + keyID);
-            	final VizLink linkNew = displayLink(fromNode, toNode, VizLink.LINK_SL);
-                linkNew.setKey(Integer.valueOf(keyID));
+
+                fromNode.ucastEvent();
+                fromNode.sendPacket(linkRev, color, width, fromNode, toNode);
+
+            } else {
+                displayLink(fromNode, toNode, VizLink.LINK_BI);
+                fromNode.ucastEvent();
+                fromNode.sendPacket(linkFwd, color, width, fromNode, toNode);
             }
         }
-*/
     }
 
 

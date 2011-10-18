@@ -1,7 +1,8 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
 import java.util.Observable;
 import java.util.StringTokenizer;
@@ -9,16 +10,16 @@ import java.util.StringTokenizer;
 /**
  * Parses the trace file entries that relate to the Aggregation module.
  */
-public class AggregationModule extends AbstractParser {
+public class SensorValue extends AbstractParser {
 
-    private final String AG_DECISION = "AGGAV";
+    private final String SENSOR_VAL = "AGGV";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public AggregationModule(final VizPanel vPanel) {
+    public SensorValue(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -36,7 +37,7 @@ public class AggregationModule extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        if (thisLine.indexOf(AG_DECISION) < 0) {
+        if (thisLine.indexOf(SENSOR_VAL) < 0) {
             return;
         }
 
@@ -52,7 +53,7 @@ public class AggregationModule extends AbstractParser {
             return;
         }
 
-        fromNode.setAggregatedValue(value + " lux");
+        fromNode.setSensorValue(value + " lux");
     }
 
 }

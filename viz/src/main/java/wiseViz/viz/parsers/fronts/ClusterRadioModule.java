@@ -1,8 +1,9 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizLink;
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
 import java.util.Observable;
 

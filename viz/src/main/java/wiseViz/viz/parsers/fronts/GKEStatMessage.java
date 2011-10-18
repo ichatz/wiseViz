@@ -1,25 +1,26 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
 import java.awt.*;
 import java.util.Observable;
 import java.util.StringTokenizer;
 
 /**
- * Vizualization for the Group Key Establishment Module.
+ * Visualizes the final stages of GKE.
  */
-public class GKEAppMessages extends AbstractParser {
+public class GKEStatMessage extends AbstractParser {
 
-    private final String MSG = "GKE_MSG";
+    private final String MSG = "GKE_STAT;";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public GKEAppMessages(final VizPanel vPanel) {
+    public GKEStatMessage(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -37,6 +38,7 @@ public class GKEAppMessages extends AbstractParser {
     public void update(final Observable obj, final Object arg) {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
+        
 
         if (thisLine.indexOf(MSG) < 0) {
             return;
@@ -44,18 +46,25 @@ public class GKEAppMessages extends AbstractParser {
 
         final StringTokenizer stok = new StringTokenizer(thisLine, ";");
         stok.nextToken();
-        final String fromNodeId = stok.nextToken();
-        final String contents = stok.nextToken();
+	
+	// last element on the ';' separated list is ...
+        String tmp;
+        do {
+        	tmp = stok.nextToken();
+        } while(stok.hasMoreElements());
 
-        final VizNode fromNode = displayNode(fromNodeId);
+	// "0" if has no key, "1" if has GROUPKEY
+	if( tmp.indexOf("1") < 0 ) {
+		return;
+	}
+
+	final VizNode fromNode = displayNode(tmp);
 
         // Check if node should be ignored
         if (fromNode == null) {
             return;
         }
 
-        fromNode.bcastEvent(Color.RED.getRGB(), 20, contents);
-
+        fromNode.setColorInt(Color.GREEN.getRGB());
     }
-
 }

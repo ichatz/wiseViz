@@ -1,25 +1,26 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
+import java.awt.*;
 import java.util.Observable;
 import java.util.StringTokenizer;
-import java.util.TreeSet;
 
 /**
  * Vizualization for the Group Key Establishment Module.
  */
-public class GKEInstalledKeys extends AbstractParser {
+public class GKEAppMessages extends AbstractParser {
 
-    private final String KEYS = "GKE_KEY";
+    private final String MSG = "GKE_MSG";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public GKEInstalledKeys(final VizPanel vPanel) {
+    public GKEAppMessages(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -38,18 +39,14 @@ public class GKEInstalledKeys extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        if (thisLine.indexOf(KEYS) < 0) {
+        if (thisLine.indexOf(MSG) < 0) {
             return;
         }
 
         final StringTokenizer stok = new StringTokenizer(thisLine, ";");
         stok.nextToken();
         final String fromNodeId = stok.nextToken();
-        TreeSet<Integer> keys = new TreeSet<Integer>();
-        while(stok.hasMoreTokens()) {
-            keys.add(Integer.valueOf(stok.nextToken()));
-	    stok.nextToken();
-        }
+        final String contents = stok.nextToken();
 
         final VizNode fromNode = displayNode(fromNodeId);
 
@@ -58,8 +55,8 @@ public class GKEInstalledKeys extends AbstractParser {
             return;
         }
 
-        // Update the node
-        fromNode.setKeys(keys);
+        fromNode.bcastEvent(Color.RED.getRGB(), 20, contents);
+
     }
 
 }

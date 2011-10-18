@@ -1,26 +1,27 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizLink;
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
 import java.awt.*;
 import java.util.Observable;
 import java.util.StringTokenizer;
 
 /**
- * Parses the trace file entries that relate to the E2E module.
+ * Parses the trace file entries that relate to the Aggregation module.
  */
-public class E2EModule extends AbstractParser {
+public class AggregationMessages extends AbstractParser {
 
-    private final String E2E_SEND = "E2E";
+    private final String AG_RCV = "AGGR";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public E2EModule(final VizPanel vPanel) {
+    public AggregationMessages(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -38,34 +39,22 @@ public class E2EModule extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        if (thisLine.indexOf(E2E_SEND) < 0) {
+        if (thisLine.indexOf(AG_RCV) < 0) {
             return;
         }
-
-        if (thisLine.toLowerCase().indexOf("e2ec") >= 0) {
-            return;
-        }
-
-        if (thisLine.toLowerCase().indexOf("e2ep") >= 0) {
-            return;
-        }
-
-        if (thisLine.toLowerCase().indexOf("cluster_radio_receive") >= 0) {
-            return;
-        }
-
 
         final StringTokenizer stok = new StringTokenizer(thisLine, ";");
         stok.nextToken();
-        final String fromNodeId = stok.nextToken();
-        final String msgType = stok.nextToken();
         final String toNodeId = stok.nextToken();
+        stok.nextToken(); // ignore type
+        final String fromNodeId = stok.nextToken();
+        stok.nextToken(); // ignore type
 
         final VizNode fromNode = displayNode(fromNodeId);
         final VizNode toNode = displayNode(toNodeId);
 
         // Check if node should be ignored
-        if ((fromNode == null) || (toNode == null)) {
+        if ((fromNode == null) && (toNode == null)) {
             return;
         }
 
@@ -74,11 +63,11 @@ public class E2EModule extends AbstractParser {
 
         if (linkFwd != null) {
             fromNode.ucastEvent();
-            fromNode.sendPacket(linkFwd, Color.RED.getRGB(), 20, fromNode, toNode);
+            fromNode.sendPacket(linkFwd, Color.BLUE.getRGB(), 16, toNode, fromNode);
 
         } else if (linkRev != null) {
             fromNode.ucastEvent();
-            fromNode.sendPacket(linkRev, Color.RED.getRGB(), 20, fromNode, toNode);
+            fromNode.sendPacket(linkRev, Color.BLUE.getRGB(), 16, toNode, fromNode);
         }
     }
 

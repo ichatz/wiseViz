@@ -10,7 +10,7 @@ import java.awt.image.MemoryImageSource;
 /**
  * Main class for instantiating the visualization panel.
  */
-public class VizMain extends JFrame {
+public class VizFRONTS extends JFrame {
 
 
     /**
@@ -25,7 +25,7 @@ public class VizMain extends JFrame {
      * @param delay        the delay in milliseconds after processing a trace line.
      * @param propertyFile the filename of the properties.
      */
-    public VizMain(final String path, final int delay, final String propertyFile) {
+    public VizFRONTS(final String path, final int delay, final String propertyFile) {
         super("FRONTS Vizualizer");
 
 
@@ -124,7 +124,7 @@ public class VizMain extends JFrame {
      */
     public static void main(final String[] args) {
         // Initialize vizualizer
-            new VizMain(args[0], Integer.parseInt(args[1]), args[2]);
+            new VizFRONTS(args[0], Integer.parseInt(args[1]), args[2]);
 
     }
 

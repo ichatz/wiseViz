@@ -1,7 +1,8 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
 import java.util.Observable;
 import java.util.StringTokenizer;
@@ -9,16 +10,16 @@ import java.util.StringTokenizer;
 /**
  * Parses the trace file entries that relate to the Aggregation module.
  */
-public class SensorValue extends AbstractParser {
+public class SemanticGroupsParser extends AbstractParser {
 
-    private final String SENSOR_VAL = "AGGV";
+    private final String SENSOR_VAL = "CLL";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public SensorValue(final VizPanel vPanel) {
+    public SemanticGroupsParser(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -40,19 +41,26 @@ public class SensorValue extends AbstractParser {
             return;
         }
 
+        final String fromNodeId = extractNodeUrn(line);
+
         final StringTokenizer stok = new StringTokenizer(thisLine, ";");
+
         stok.nextToken();
-        final String fromNodeId = stok.nextToken();
+        stok.nextToken();
+
         final String value = stok.nextToken();
+        final String gparent = stok.nextToken();
 
         final VizNode fromNode = displayNode(fromNodeId);
+        System.out.println("" + fromNodeId + " has sema " + value);
 
         // Check if node should be ignored
         if (fromNode == null) {
             return;
         }
 
-        fromNode.setSensorValue(value + " lux");
+        fromNode.addSemanticGroup(value, gparent);
     }
 
 }
+

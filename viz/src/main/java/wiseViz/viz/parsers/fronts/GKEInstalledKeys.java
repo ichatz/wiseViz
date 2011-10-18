@@ -1,31 +1,26 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
-import wizeViz.viz.base.VizLink;
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
 import java.util.Observable;
 import java.util.StringTokenizer;
+import java.util.TreeSet;
 
 /**
- * Parses the trace file entries that relate to the Neighborhood discovery module.
+ * Vizualization for the Group Key Establishment Module.
  */
-public class NeighborhoodModule extends AbstractParser {
+public class GKEInstalledKeys extends AbstractParser {
 
-    private final String ECHO_UNI = "NB";
-
-    private final String ECHO_BIDI = "NBB";
-
-    private final String ECHO_LOST = "NBD";
-
-    private final String ECHO_LOST_BIDI = "NBL";
+    private final String KEYS = "GKE_KEY";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public NeighborhoodModule(final VizPanel vPanel) {
+    public GKEInstalledKeys(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -44,36 +39,28 @@ public class NeighborhoodModule extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        if (thisLine.indexOf(ECHO_UNI) < 0) {
+        if (thisLine.indexOf(KEYS) < 0) {
             return;
         }
 
         final StringTokenizer stok = new StringTokenizer(thisLine, ";");
-        final String msgType = stok.nextToken();
-        final String toNodeId = stok.nextToken();
+        stok.nextToken();
         final String fromNodeId = stok.nextToken();
+        TreeSet<Integer> keys = new TreeSet<Integer>();
+        while(stok.hasMoreTokens()) {
+            keys.add(Integer.valueOf(stok.nextToken()));
+	    stok.nextToken();
+        }
 
         final VizNode fromNode = displayNode(fromNodeId);
-        final VizNode toNode = displayNode(toNodeId);
 
         // Check if node should be ignored
-        if ((fromNode == null) || (toNode == null)) {
+        if (fromNode == null) {
             return;
         }
 
-        // Set Link or Remove Link depending on debug message
-        if (msgType.equals(ECHO_UNI)) {
-            displayLink(fromNode, toNode, VizLink.LINK_UNI);
-
-        } else if (msgType.equals(ECHO_BIDI)) {
-            displayLink(fromNode, toNode, VizLink.LINK_BI);
-
-        } else if (msgType.equals(ECHO_LOST)) {
-            removeLink(fromNode, toNode);
-
-        } else if (msgType.equals(ECHO_LOST_BIDI)) {
-            displayLink(fromNode, toNode, VizLink.LINK_UNI);
-        }
+        // Update the node
+        fromNode.setKeys(keys);
     }
 
 }

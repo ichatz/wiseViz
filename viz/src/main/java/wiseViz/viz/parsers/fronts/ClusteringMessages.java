@@ -1,8 +1,9 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizLink;
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
 import java.awt.*;
 import java.util.Observable;
@@ -11,16 +12,16 @@ import java.util.StringTokenizer;
 /**
  * Parses the trace file entries that relate to the Clustering module.
  */
-public class ClusterRadioMessages extends AbstractParser {
+public class ClusteringMessages extends AbstractParser {
 
-    private final String CLUSTER_RADIO_SEND = "CLRS";
+    private final String CLUSTER_SEND = "CLS";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public ClusterRadioMessages(final VizPanel vPanel) {
+    public ClusteringMessages(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -38,7 +39,7 @@ public class ClusterRadioMessages extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        if (thisLine.indexOf(CLUSTER_RADIO_SEND) < 0) {
+        if (thisLine.indexOf(CLUSTER_SEND) < 0) {
             return;
         }
 
@@ -47,56 +48,34 @@ public class ClusterRadioMessages extends AbstractParser {
         final String fromNodeId = stok.nextToken();
         final String msgType = stok.nextToken();
         final String toNodeId = stok.nextToken();
-        final String payload = stok.nextToken();
 
         final VizNode fromNode = displayNode(fromNodeId);
         final VizNode toNode = displayNode(toNodeId);
 
-        if ((fromNode != null) && (toNode != null)) {
+        if (toNode == null) {
+            // Broadcast to all neighbors
+            for (VizLink vizLink : fromNode.getLinks()) {
+                fromNode.ucastEvent();
+                if (vizLink.getTarget().getId() == fromNode.getId()) {
+                    fromNode.sendPacket(vizLink, Color.GREEN.getRGB(), 4, fromNode, vizLink.getTarget());
+                } else {
+                    fromNode.sendPacket(vizLink, Color.GREEN.getRGB(), 4, fromNode, vizLink.getSource());
+                }
+            }
+
+        } else {
             final VizLink linkFwd = fromNode.getLink(toNode.getId());
             final VizLink linkRev = toNode.getLink(fromNode.getId());
 
-            int color = 0, width = 0;
-            if (payload.equals("0x70")) {
-                // control - RRQ
-                color = Color.MAGENTA.getRGB();
-                width = 2;
-
-            } else if (payload.equals("0x71")) {
-                // control - RPL
-                color = Color.MAGENTA.getRGB();
-                width = 2;
-
-            } else if (payload.equals("0x6f")) {
-                // data
-                color = Color.RED.getRGB();
-                width = 20;
-            }
-
             if (linkFwd != null) {
-                // enforce link  bidirectionallity
-                linkFwd.setType(VizLink.LINK_BI);
-                linkFwd.setEnabled(true);
-
                 fromNode.ucastEvent();
-                fromNode.sendPacket(linkFwd, color, width, fromNode, toNode);
+                fromNode.sendPacket(linkFwd, Color.GREEN.getRGB(), 4, fromNode, toNode);
 
             } else if (linkRev != null) {
-                // enforce link  bidirectionallity
-                linkRev.setType(VizLink.LINK_BI);
-                linkRev.setEnabled(true);
-
                 fromNode.ucastEvent();
-                fromNode.sendPacket(linkRev, color, width, fromNode, toNode);
-
-            } else {
-                displayLink(fromNode, toNode, VizLink.LINK_BI);
-                fromNode.ucastEvent();
-                fromNode.sendPacket(linkFwd, color, width, fromNode, toNode);
+                fromNode.sendPacket(linkRev, Color.GREEN.getRGB(), 4, fromNode, toNode);
             }
         }
     }
 
-
 }
-

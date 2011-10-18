@@ -1,29 +1,27 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
-import java.awt.*;
 import java.util.Observable;
 import java.util.StringTokenizer;
 
 /**
- * Visualizes the final stages of GKE.
+ * Parses the trace file entries that relate to the Aggregation module.
  */
-public class GKEClustering extends AbstractParser {
+public class AggregationModule extends AbstractParser {
 
-    private final String MSG = "GKE;";
-    private final String MSG_LEADER = "GKE_LEADER;";
+    private final String AG_DECISION = "AGGAV";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public GKEClustering(final VizPanel vPanel) {
+    public AggregationModule(final VizPanel vPanel) {
         super(vPanel);
     }
-
 
     /**
      * This method is called whenever the observed object is changed. An
@@ -39,13 +37,14 @@ public class GKEClustering extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        if (thisLine.indexOf(MSG) < 0 && thisLine.indexOf(MSG_LEADER) < 0) {
+        if (thisLine.indexOf(AG_DECISION) < 0) {
             return;
         }
 
         final StringTokenizer stok = new StringTokenizer(thisLine, ";");
         stok.nextToken();
         final String fromNodeId = stok.nextToken();
+        final String value = stok.nextToken();
 
         final VizNode fromNode = displayNode(fromNodeId);
 
@@ -54,6 +53,7 @@ public class GKEClustering extends AbstractParser {
             return;
         }
 
-        fromNode.setColorInt(Color.GREEN.getRGB());
+        fromNode.setAggregatedValue(value + " lux");
     }
+
 }

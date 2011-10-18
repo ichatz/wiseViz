@@ -1,28 +1,35 @@
-package wizeViz.viz.parsers;
+package wizeViz.viz.parsers.fronts;
 
 import wizeViz.viz.base.VizLink;
 import wizeViz.viz.base.VizNode;
 import wizeViz.viz.base.VizPanel;
+import wizeViz.viz.parsers.AbstractParser;
 
-import java.awt.*;
 import java.util.Observable;
 import java.util.StringTokenizer;
 
 /**
- * Parses the trace file entries that relate to the Aggregation module.
+ * Parses the trace file entries that relate to the Neighborhood discovery module.
  */
-public class AggregationMessages extends AbstractParser {
+public class NeighborhoodModule extends AbstractParser {
 
-    private final String AG_RCV = "AGGR";
+    private final String ECHO_UNI = "NB";
+
+    private final String ECHO_BIDI = "NBB";
+
+    private final String ECHO_LOST = "NBD";
+
+    private final String ECHO_LOST_BIDI = "NBL";
 
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public AggregationMessages(final VizPanel vPanel) {
+    public NeighborhoodModule(final VizPanel vPanel) {
         super(vPanel);
     }
+
 
     /**
      * This method is called whenever the observed object is changed. An
@@ -38,35 +45,35 @@ public class AggregationMessages extends AbstractParser {
         final String line = (String) arg;
         final String thisLine = line.substring(line.indexOf("Text [") + "Text [".length(), line.indexOf("]", line.indexOf("Text [")));
 
-        if (thisLine.indexOf(AG_RCV) < 0) {
+        if (thisLine.indexOf(ECHO_UNI) < 0) {
             return;
         }
 
         final StringTokenizer stok = new StringTokenizer(thisLine, ";");
-        stok.nextToken();
+        final String msgType = stok.nextToken();
         final String toNodeId = stok.nextToken();
-        stok.nextToken(); // ignore type
         final String fromNodeId = stok.nextToken();
-        stok.nextToken(); // ignore type
 
         final VizNode fromNode = displayNode(fromNodeId);
         final VizNode toNode = displayNode(toNodeId);
 
         // Check if node should be ignored
-        if ((fromNode == null) && (toNode == null)) {
+        if ((fromNode == null) || (toNode == null)) {
             return;
         }
 
-        final VizLink linkFwd = fromNode.getLink(toNode.getId());
-        final VizLink linkRev = toNode.getLink(fromNode.getId());
+        // Set Link or Remove Link depending on debug message
+        if (msgType.equals(ECHO_UNI)) {
+            displayLink(fromNode, toNode, VizLink.LINK_UNI);
 
-        if (linkFwd != null) {
-            fromNode.ucastEvent();
-            fromNode.sendPacket(linkFwd, Color.BLUE.getRGB(), 16, toNode, fromNode);
+        } else if (msgType.equals(ECHO_BIDI)) {
+            displayLink(fromNode, toNode, VizLink.LINK_BI);
 
-        } else if (linkRev != null) {
-            fromNode.ucastEvent();
-            fromNode.sendPacket(linkRev, Color.BLUE.getRGB(), 16, toNode, fromNode);
+        } else if (msgType.equals(ECHO_LOST)) {
+            removeLink(fromNode, toNode);
+
+        } else if (msgType.equals(ECHO_LOST_BIDI)) {
+            displayLink(fromNode, toNode, VizLink.LINK_UNI);
         }
     }
 
