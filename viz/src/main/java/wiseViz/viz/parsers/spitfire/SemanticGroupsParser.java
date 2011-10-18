@@ -1,8 +1,8 @@
-package wizeViz.viz.parsers.fronts;
+package wiseViz.viz.parsers.spitfire;
 
-import wizeViz.viz.base.VizNode;
-import wizeViz.viz.base.VizPanel;
-import wizeViz.viz.parsers.AbstractParser;
+import wiseViz.viz.base.VizNode;
+import wiseViz.viz.base.VizPanel;
+import wiseViz.viz.parsers.AbstractParser;
 
 import java.util.Observable;
 import java.util.StringTokenizer;
