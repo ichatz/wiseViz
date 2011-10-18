@@ -198,9 +198,6 @@ public final class VizPanel extends PApplet {
         // Setup Background image
         setupBGMap();
 
-        // Setup Arduino Nodes
-        setupArduino();
-
         // Add periodic tasks
         setupTasks();
     }
@@ -241,81 +238,6 @@ public final class VizPanel extends PApplet {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-    }
-
-    private void setupArduino() {
-        // Load arduino nodes
-        int totArduino = VizProperties.getInstance().getProperty(VizProperties.ARDUINO_COUNT, 0);
-        for (int arduino = 0; arduino < totArduino; arduino++) {
-            float posX = screen.width / 4 + arduino * 100;
-            float posY = screen.height / 2;
-            // try to load position of node
-            String strPos = VizProperties.getInstance().getProperty(VizProperties.ARDUINO_POSITION + Integer.toString(arduino));
-            if (strPos != null) {
-                StringTokenizer stok = new StringTokenizer(strPos, ",");
-                posX = Float.parseFloat(stok.nextToken());
-                posY = Float.parseFloat(stok.nextToken());
-
-                posX *= getScaleX();
-                posY *= getScaleY();
-
-                posX += getOffsetX();
-                posY += getOffsetY();
-            }
-
-            VizArduinoNode node = new VizArduinoNode(this, arduino, posX, posY,
-                    nodeSize, arduinoSize,
-                    Color.WHITE.getRGB(),  // Inner color
-                    Color.WHITE.getRGB(), // Send Msg color
-                    Color.WHITE.getRGB()); // Font color
-
-            synchronized (nodes) {
-                nodes.put(arduino, node);
-                arduinoList.add(node);
-
-                timer.scheduleAtFixedRate(new NodeTransmitEvent(node), 0, FLUSH_ND_MOD + ((int) random(100)));
-            }
-        }
-    }
-
-    public void setupArduinoLinks(final VizNode node) {
-        synchronized (links) {
-
-            // Add virtual links with Arduino
-            switch (node.getId()) {
-                case 378:
-                case 3262: {
-                    double linkID1 = Double.parseDouble(node.getId() + "." + arduinoList.get(0).getId());
-                    VizLink link = new VizLink(this, node, arduinoList.get(0), VizLink.LINK_BI);
-                    links.put(linkID1, link);
-                    node.addLink(arduinoList.get(0).getId(), link);
-                    arduinoList.get(0).addLink(node.getId(), link);
-                    break;
-                }
-
-                case 260:
-                case 3218:
-                case 3227: {
-                    double linkID1 = Double.parseDouble(node.getId() + "." + arduinoList.get(1).getId());
-                    VizLink link = new VizLink(this, node, arduinoList.get(1), VizLink.LINK_BI);
-                    links.put(linkID1, link);
-                    node.addLink(arduinoList.get(1).getId(), link);
-                    arduinoList.get(1).addLink(node.getId(), link);
-                    break;
-                }
-
-                case 1407:
-                case 2168:
-                case 3240: {
-                    double linkID1 = Double.parseDouble(node.getId() + "." + arduinoList.get(2).getId());
-                    VizLink link = new VizLink(this, node, arduinoList.get(2), VizLink.LINK_BI);
-                    links.put(linkID1, link);
-                    node.addLink(arduinoList.get(2).getId(), link);
-                    arduinoList.get(2).addLink(node.getId(), link);
-                    break;
-                }
-            }
         }
     }
 
@@ -469,7 +391,7 @@ public final class VizPanel extends PApplet {
             }
         }
 
-        setupArduinoLinks(node);
+        //setupArduinoLinks(node);
 
         synchronized (timer) {
             try {
