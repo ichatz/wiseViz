@@ -7,21 +7,12 @@
     <property name="targetdir" value="${outdir}/bin"/>
 
 <!--    <property name="logfile" value="/home/amaxilatis/Documents/Dropbox/tr.assembly/scripts/trace2.out"/> -->
-    <property name="logfile" value="../traces/trace.1"/>
+    <property name="logfile" value="../traces/tinyRPL/BLIP2_0_6Nodes_20111013.dcf"/>
     <property name="delay" value="50"/>
-    <property name="propfile" value="../traces/template.properties"/>
+    <property name="propfile" value="../traces/tinyRPL/tinyrpl.properties"/>
 
     <path id="libraries">
         <fileset dir="${librarydir}">
-            <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${librarydir}/wisebed">
-            <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${librarydir}/physics">
-            <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${librarydir}/opencv">
             <include name="*.jar"/>
         </fileset>
         <pathelement location="${targetdir}"/>
@@ -63,7 +54,7 @@
     </target>
 
     <target name="runFRONTS" depends="jar">
-        <java classname="wizeViz.viz.VizFRONTS" fork="true">
+        <java classname="wiseViz.viz.VizFRONTS" fork="true">
             <classpath>
                 <path refid="libraries"/>
                 <path location="${outdir}/wiseViz.jar"/>
@@ -75,7 +66,7 @@
     </target>
 
     <target name="runRPL" depends="jar">
-        <java classname="wizeViz.viz.VizRPL" fork="true">
+        <java classname="wiseViz.viz.VizRPL" fork="true">
             <classpath>
                 <path refid="libraries"/>
                 <path location="${outdir}/wiseViz.jar"/>
