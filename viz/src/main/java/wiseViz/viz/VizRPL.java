@@ -75,8 +75,7 @@ public class VizRPL extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Set Frames Dimensions
-//        setSize(dim.width, dim.height);
-        setSize(1024, 768);
+        setSize(dim.width, dim.height);
 
         //setLocation(-1366,0);
 
