@@ -44,15 +44,18 @@ public class DIOPacketParser
             return;
         }
 
+        // locate first space and use it as an offset
+        final int startOfTag = line.indexOf(' ') - 2;
+
         // Extract message type
-        final String strMessageType = line.substring(128, 130);
+        final String strMessageType = line.substring(128 + startOfTag, 130 + startOfTag);
         if (!strMessageType.equals("01")) {
             // this is not a DIO packet
             return;
         }
 
         // Extract source id
-        final String strSource = "0x" + line.substring(38, 42);
+        final String strSource = "0x" + line.substring(38 + startOfTag, 42 + startOfTag).replace("0","") + "00";
         final VizNode thisNode = displayNode(strSource);
 
         // Broadcast to all neighbors

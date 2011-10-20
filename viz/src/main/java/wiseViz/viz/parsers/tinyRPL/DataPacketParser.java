@@ -44,19 +44,21 @@ public class DataPacketParser
             return;
         }
 
+        // locate first space and use it as an offset
+        final int startOfTag = line.indexOf(' ') - 2;
+
         // Extract message type
-        final String strMessageType = line.substring(58, 60);
-        if (!strMessageType.equals("11")) {
+        if (!line.contains(" 81 ")) {
             // this is not a DATA packet
             return;
         }
 
         // Extract source id
-        final String strSource = "0x" + line.substring(92, 94) + "00";
+        final String strSource = "0x" + line.substring(92 + startOfTag, 94 + startOfTag).replace("0","") + "00";
         final VizNode fromNode = displayNode(strSource);
 
         // Extract target id
-        final String strTarget = "0x" + line.substring(124, 126) + "00";
+        final String strTarget = "0x" + line.substring(124 + startOfTag, 126 + startOfTag).replace("0","") + "00";
         final VizNode toNode = displayNode(strTarget);
 
         final VizLink linkFwd = fromNode.getLink(toNode.getId());
@@ -64,11 +66,11 @@ public class DataPacketParser
 
         if (linkFwd != null) {
             fromNode.ucastEvent();
-            fromNode.sendPacket(linkFwd, Color.BLUE.getRGB(), 16, fromNode, toNode);
+            fromNode.sendPacket(linkFwd, Color.BLUE.getRGB(), 32, fromNode, toNode);
 
         } else if (linkRev != null) {
             fromNode.ucastEvent();
-            fromNode.sendPacket(linkRev, Color.BLUE.getRGB(), 16, fromNode, toNode);
+            fromNode.sendPacket(linkRev, Color.BLUE.getRGB(), 32, fromNode, toNode);
         }
     }
 

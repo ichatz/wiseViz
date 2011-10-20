@@ -44,15 +44,18 @@ public class DAOPacketParser
             return;
         }
 
+        // locate first space and use it as an offset
+        final int startOfTag = line.indexOf(' ') - 2;
+
         // Extract message type
-        final String strMessageType = line.substring(137, 139);
+        final String strMessageType = line.substring(137 + startOfTag, 139 + startOfTag);
         if (!strMessageType.equals("02")) {
             // this is not a DAO packet
             return;
         }
 
         // Extract source id
-        final String strSource = "0x" + line.substring(39, 43);
+        final String strSource = "0x" + line.substring(39 + startOfTag, 43 + startOfTag).replace("0","") + "00";
         final VizNode thisNode = displayNode(strSource);
 
         // Broadcast to all neighbors

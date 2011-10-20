@@ -44,15 +44,18 @@ public class DISPacketParser
             return;
         }
 
+        // locate first space and use it as an offset
+        final int startOfTag = line.indexOf(' ') - 2;
+
         // Extract message type
-        final String strMessageType = line.substring(128, 130);
+        final String strMessageType = line.substring(128 + startOfTag, 130 + startOfTag);
         if (!strMessageType.equals("00")) {
             // this is not a DIS packet
             return;
         }
 
         // Extract source id
-        final String strSource = "0x" + line.substring(38, 41);
+        final String strSource = "0x" + line.substring(38 + startOfTag, 41 + startOfTag).replace("0","") + "00";
         final VizNode thisNode = displayNode(strSource);
 
         // Broadcast to all neighbors
