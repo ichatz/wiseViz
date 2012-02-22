@@ -1,7 +1,6 @@
 package wiseViz.viz.base;
 
 import wiseViz.viz.VizProperties;
-import wiseViz.viz.tasks.NodeTransmitEvent;
 import wiseViz.viz.tasks.PulseNodeEvents;
 import wiseViz.viz.tasks.PulsePacketEvents;
 import processing.core.PApplet;

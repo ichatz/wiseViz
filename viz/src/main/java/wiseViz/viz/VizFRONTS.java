@@ -1,9 +1,8 @@
 package wiseViz.viz;
 
-import wizeViz.viz.base.VizPanel;
-import wizeViz.viz.parsers.SpitfireTestObserver;
-import wiseViz.viz.parsers.fronts.*;
-import wiseViz.viz.parsers.spitfire.SemanticGroupsParser;
+
+import wiseViz.viz.base.VizPanel;
+import wiseViz.viz.parsers.spitfire.SpitfireTestObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -130,7 +129,7 @@ public class VizFRONTS extends JFrame {
      */
     public static void main(final String[] args) {
         // Initialize vizualizer
-            new VizFRONTS(args[0], Integer.parseInt(args[1]), args[2]);
+        new VizFRONTS(args[0], Integer.parseInt(args[1]), args[2]);
 
     }
 

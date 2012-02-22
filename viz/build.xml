@@ -6,17 +6,18 @@
     <property name="outdir" value="${basedir}/out"/>
     <property name="targetdir" value="${outdir}/bin"/>
 
-<!--    <property name="logfile" value="/home/amaxilatis/Documents/Dropbox/tr.assembly/scripts/trace2.out"/> -->
-<<<<<<< HEAD
-<!--    <property name="logfile" value="../traces/trace.1"/>-->
+    <!--    <property name="logfile" value="/home/amaxilatis/Documents/Dropbox/tr.assembly/scripts/trace2.out"/> -->
+
     <property name="logfile" value="net10.txt"/>
     <property name="delay" value="1"/>
     <property name="propfile" value="./properties/template.properties"/>
-=======
-    <property name="logfile" value="../traces/tinyRPL/BLIP2_0_6Nodes_20111013.dcf"/>
-    <property name="delay" value="50"/>
-    <property name="propfile" value="../traces/tinyRPL/tinyrpl.properties"/>
->>>>>>> 88f046644397c88520d7d085a2b39392b2365a4d
+
+    <!--
+        <property name="logfile" value="../traces/tinyRPL/BLIP2_0_6Nodes_20111013.dcf"/>
+        <property name="delay" value="50"/>
+        <property name="propfile" value="../traces/tinyRPL/tinyrpl.properties"/>
+    -->
+
 
     <path id="libraries">
         <fileset dir="${librarydir}">
