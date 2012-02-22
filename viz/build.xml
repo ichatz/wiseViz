@@ -1,4 +1,4 @@
-<project name="FRONTS Viz" default="compile">
+<project name="WiseViz" default="compile">
 
     <property name="sourcedir" value="${basedir}/src"/>
     <property name="librarydir" value="${basedir}/lib"/>
@@ -7,22 +7,19 @@
     <property name="targetdir" value="${outdir}/bin"/>
 
 <!--    <property name="logfile" value="/home/amaxilatis/Documents/Dropbox/tr.assembly/scripts/trace2.out"/> -->
+<<<<<<< HEAD
 <!--    <property name="logfile" value="../traces/trace.1"/>-->
     <property name="logfile" value="net10.txt"/>
     <property name="delay" value="1"/>
     <property name="propfile" value="./properties/template.properties"/>
+=======
+    <property name="logfile" value="../traces/tinyRPL/BLIP2_0_6Nodes_20111013.dcf"/>
+    <property name="delay" value="50"/>
+    <property name="propfile" value="../traces/tinyRPL/tinyrpl.properties"/>
+>>>>>>> 88f046644397c88520d7d085a2b39392b2365a4d
 
     <path id="libraries">
         <fileset dir="${librarydir}">
-            <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${librarydir}/wisebed">
-            <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${librarydir}/physics">
-            <include name="*.jar"/>
-        </fileset>
-        <fileset dir="${librarydir}/opencv">
             <include name="*.jar"/>
         </fileset>
         <pathelement location="${targetdir}"/>
@@ -55,19 +52,31 @@
     </target>
 
     <target name="jar" depends="compile" description="create jar">
-        <jar destfile="${outdir}/fronts-viz.jar" basedir="${targetdir}">
+        <jar destfile="${outdir}/wiseViz.jar" basedir="${targetdir}">
             <manifest>
                 <attribute name="Built-By" value="FRONTS"/>
-                <attribute name="Main-Class" value="wizeViz.viz.VizMain"/>
+                <attribute name="Main-Class" value="wiseViz.viz.VizFRONTS"/>
             </manifest>
         </jar>
     </target>
 
-    <target name="run" depends="jar">
-        <java classname="wizeViz.viz.VizMain" fork="true">
+    <target name="runFRONTS" depends="jar">
+        <java classname="wiseViz.viz.VizFRONTS" fork="true">
             <classpath>
                 <path refid="libraries"/>
-                <path location="${outdir}/fronts-viz.jar"/>
+                <path location="${outdir}/wiseViz.jar"/>
+            </classpath>
+            <arg value="${logfile}"/>
+            <arg value="${delay}"/>
+            <arg value="${propfile}"/>
+        </java>
+    </target>
+
+    <target name="runRPL" depends="jar">
+        <java classname="wiseViz.viz.VizRPL" fork="true">
+            <classpath>
+                <path refid="libraries"/>
+                <path location="${outdir}/wiseViz.jar"/>
             </classpath>
             <arg value="${logfile}"/>
             <arg value="${delay}"/>
@@ -83,10 +92,10 @@
                 author="true"
                 version="true"
                 use="true"
-                windowtitle="FRONTS Viz">
+                windowtitle="WiseViz">
             <packageset dir="${sourcedir}" defaultexcludes="yes">
-                <include name="eu.fronts.unified.viz/**"/>
-                <exclude name="eu.fronts.unified.viz/**/test/**"/>
+                <include name="wiseViz.viz/**"/>
+                <exclude name="wiseViz.viz/**/test/**"/>
             </packageset>
 
         </javadoc>

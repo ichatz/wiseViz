@@ -1,4 +1,4 @@
-package wizeViz.viz.base;
+package wiseViz.viz.base;
 
 import processing.core.PImage;
 

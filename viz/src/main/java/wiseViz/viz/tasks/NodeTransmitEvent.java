@@ -1,6 +1,6 @@
-package wizeViz.viz.tasks;
+package wiseViz.viz.tasks;
 
-import wizeViz.viz.base.VizNode;
+import wiseViz.viz.base.VizNode;
 
 import java.util.TimerTask;
 

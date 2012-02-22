@@ -1,15 +1,27 @@
-package wizeViz.viz.base;
+package wiseViz.viz.base;
 
-import wizeViz.viz.VizProperties;
-import wizeViz.viz.tasks.NodeTransmitEvent;
-import wizeViz.viz.tasks.PulseNodeEvents;
-import wizeViz.viz.tasks.PulsePacketEvents;
+import wiseViz.viz.VizProperties;
+import wiseViz.viz.tasks.NodeTransmitEvent;
+import wiseViz.viz.tasks.PulseNodeEvents;
+import wiseViz.viz.tasks.PulsePacketEvents;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.lang.Double;
+import java.lang.Exception;
+import java.lang.Float;
+import java.lang.Integer;
+import java.lang.String;
+import java.lang.SuppressWarnings;
+import java.lang.System;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.TreeMap;
 
 /**
  * Sophisticated Front End for the FRONTS unified experiment.
@@ -122,11 +134,6 @@ public final class VizPanel extends PApplet {
 
     private boolean enableCam = false;
 
-    /**
-     * Camera image.
-     */
-    private PImage camera;
-
     private int selectedNodePos;
 
     private int selectedArduinoPos;
@@ -193,13 +200,8 @@ public final class VizPanel extends PApplet {
         textFont(font, 255);
         textSize(16);
 
-        camera = null;
-
         // Setup Background image
         setupBGMap();
-
-        // Setup Arduino Nodes
-        setupArduino();
 
         // Add periodic tasks
         setupTasks();
@@ -244,81 +246,6 @@ public final class VizPanel extends PApplet {
         }
     }
 
-    private void setupArduino() {
-        // Load arduino nodes
-        int totArduino = VizProperties.getInstance().getProperty(VizProperties.ARDUINO_COUNT, 0);
-        for (int arduino = 0; arduino < totArduino; arduino++) {
-            float posX = screen.width / 4 + arduino * 100;
-            float posY = screen.height / 2;
-            // try to load position of node
-            String strPos = VizProperties.getInstance().getProperty(VizProperties.ARDUINO_POSITION + Integer.toString(arduino));
-            if (strPos != null) {
-                StringTokenizer stok = new StringTokenizer(strPos, ",");
-                posX = Float.parseFloat(stok.nextToken());
-                posY = Float.parseFloat(stok.nextToken());
-
-                posX *= getScaleX();
-                posY *= getScaleY();
-
-                posX += getOffsetX();
-                posY += getOffsetY();
-            }
-
-            VizArduinoNode node = new VizArduinoNode(this, arduino, posX, posY,
-                    nodeSize, arduinoSize,
-                    Color.WHITE.getRGB(),  // Inner color
-                    Color.WHITE.getRGB(), // Send Msg color
-                    Color.WHITE.getRGB()); // Font color
-
-            synchronized (nodes) {
-                nodes.put(arduino, node);
-                arduinoList.add(node);
-
-                timer.scheduleAtFixedRate(new NodeTransmitEvent(node), 0, FLUSH_ND_MOD + ((int) random(100)));
-            }
-        }
-    }
-
-    public void setupArduinoLinks(final VizNode node) {
-        synchronized (links) {
-
-            // Add virtual links with Arduino
-            switch (node.getId()) {
-                case 378:
-                case 3262: {
-                    double linkID1 = Double.parseDouble(node.getId() + "." + arduinoList.get(0).getId());
-                    VizLink link = new VizLink(this, node, arduinoList.get(0), VizLink.LINK_BI);
-                    links.put(linkID1, link);
-                    node.addLink(arduinoList.get(0).getId(), link);
-                    arduinoList.get(0).addLink(node.getId(), link);
-                    break;
-                }
-
-                case 260:
-                case 3218:
-                case 3227: {
-                    double linkID1 = Double.parseDouble(node.getId() + "." + arduinoList.get(1).getId());
-                    VizLink link = new VizLink(this, node, arduinoList.get(1), VizLink.LINK_BI);
-                    links.put(linkID1, link);
-                    node.addLink(arduinoList.get(1).getId(), link);
-                    arduinoList.get(1).addLink(node.getId(), link);
-                    break;
-                }
-
-                case 1407:
-                case 2168:
-                case 3240: {
-                    double linkID1 = Double.parseDouble(node.getId() + "." + arduinoList.get(2).getId());
-                    VizLink link = new VizLink(this, node, arduinoList.get(2), VizLink.LINK_BI);
-                    links.put(linkID1, link);
-                    node.addLink(arduinoList.get(2).getId(), link);
-                    arduinoList.get(2).addLink(node.getId(), link);
-                    break;
-                }
-            }
-        }
-    }
-
     /**
      * Keep the motor running... draw() needs to be added in auto mode, even if it is empty to keep things rolling.
      */
@@ -340,11 +267,6 @@ public final class VizPanel extends PApplet {
 
         // Draw the network elements
         drawNetwork();
-
-        // draw camera effects
-        if (enableCam) {
-            image(camera, 0, 0);
-        }
     }
 
     /**
@@ -427,12 +349,6 @@ public final class VizPanel extends PApplet {
         }
     }
 
-    public void setCamera(final PImage camera) {
-        synchronized (this) {
-            this.camera = camera;
-        }
-    }
-
     /**
      * Adds a new node in the network.
      *
@@ -469,16 +385,16 @@ public final class VizPanel extends PApplet {
             }
         }
 
-        setupArduinoLinks(node);
+        //setupArduinoLinks(node);
 
-        synchronized (timer) {
-            try {
-                timer.scheduleAtFixedRate(new NodeTransmitEvent(node), 0, FLUSH_ND_MOD + ((int) random(100)));
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-        }
+//        synchronized (timer) {
+//            try {
+//                timer.scheduleAtFixedRate(new NodeTransmitEvent(node), 0, FLUSH_ND_MOD + ((int) random(100)));
+//            } catch (Exception ex) {
+//                ex.printStackTrace();
+//            }
+//
+//        }
 
         node.bcastEvent();
         return node;

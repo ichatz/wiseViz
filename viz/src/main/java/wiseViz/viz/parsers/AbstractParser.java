@@ -1,11 +1,16 @@
-package wizeViz.viz.parsers;
+package wiseViz.viz.parsers;
 
-import wizeViz.viz.VizProperties;
-import wizeViz.viz.base.VizLink;
-import wizeViz.viz.base.VizNode;
-import wizeViz.viz.base.VizPanel;
+import wiseViz.viz.VizProperties;
+import wiseViz.viz.base.VizLink;
+import wiseViz.viz.base.VizNode;
+import wiseViz.viz.base.VizPanel;
 
-import java.awt.*;
+import java.awt.Color;
+import java.lang.Boolean;
+import java.lang.Exception;
+import java.lang.Float;
+import java.lang.Integer;
+import java.lang.String;
 import java.util.Observer;
 import java.util.StringTokenizer;
 
@@ -45,14 +50,6 @@ public abstract class AbstractParser implements Observer {
             return null;
         }
 
-        if ((strNodeId.toLowerCase().contains("0x4d78"))
-                || (strNodeId.toLowerCase().contains("0x5eef"))
-                || (strNodeId.toLowerCase().contains("0x55c7"))) {
-            // Broadcast destination address
-            // ignore
-            return null;
-        }
-
         // Check if this node is already displayed
         final int nodeId = convertNodeId(strNodeId);
 
@@ -60,7 +57,7 @@ public abstract class AbstractParser implements Observer {
             // already exists
             node = parent.getNode(nodeId);
 
-            parent.setupArduinoLinks(node);
+            //parent.setupArduinoLinks(node);
 
         } else {
             final int totNodes = parent.getNodesSize();

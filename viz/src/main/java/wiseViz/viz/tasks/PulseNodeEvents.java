@@ -1,7 +1,8 @@
-package wizeViz.viz.tasks;
+package wiseViz.viz.tasks;
 
-import wizeViz.viz.base.VizPanel;
+import wiseViz.viz.base.VizPanel;
 
+import java.lang.Exception;
 import java.util.TimerTask;
 
 /**

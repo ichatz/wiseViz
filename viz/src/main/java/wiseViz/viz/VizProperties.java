@@ -1,4 +1,4 @@
-package wizeViz.viz;
+package wiseViz.viz;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

@@ -1,4 +1,4 @@
-package wizeViz.viz.base;
+package wiseViz.viz.base;
 
 import processing.core.PApplet;
 
@@ -476,22 +476,24 @@ public class VizNode {
         parent.fill(colorFont, 255);
         parent.textSize(12);
         parent.textAlign(PApplet.CENTER);
-        parent.text(hexId, 0, nodeWidth - 25);
+        parent.text(hexId, 0, nodeWidth + 5);
 
         parent.textSize(16);
         parent.textAlign(PApplet.LEFT);
         parent.text(sensorValue, nodeWidth - 30, 16);
 
         if (!semanticGroups.isEmpty()) {
-            String totalsems = "";
-            for (String sems : semanticGroups.keySet()) {
-                totalsems += (sems + semanticGroups.get(sems) + "\n");
+            final StringBuilder totalsems = new StringBuilder();
+            for (final String sems : semanticGroups.keySet()) {
+                totalsems.append(sems);
+                totalsems.append(semanticGroups.get(sems));
+                totalsems.append("\n");
 
             }
+
             parent.textSize(12);
             parent.textAlign(PApplet.LEFT);
-            parent.text(totalsems, nodeWidth - 30, 16);
-//            }
+            parent.text(totalsems.toString(), nodeWidth - 30, 16);
         }
 
 
