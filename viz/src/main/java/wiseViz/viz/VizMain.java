@@ -1,7 +1,7 @@
 package wizeViz.viz;
 
 import wizeViz.viz.base.VizPanel;
-import wizeViz.viz.parsers.*;
+import wizeViz.viz.parsers.SpitfireTestObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,6 +84,7 @@ public class VizMain extends JFrame {
             final LogObserver lproc = new LogObserver(path, delay);
 
             // Add trace file parsers
+            /*
             lproc.addObserver(new NodeEnable(panel));
             lproc.addObserver(new NodeDisable(panel));
             lproc.addObserver(new TimestampParser(panel));
@@ -105,6 +106,8 @@ public class VizMain extends JFrame {
             lproc.addObserver(new GKEAppMessages(panel));
             lproc.addObserver(new GKEStatMessage(panel));    // WROC hack :]
             lproc.addObserver(new SemanticGroupsParser(panel));    // WROC hack :]
+            */
+            lproc.addObserver(new SpitfireTestObserver(panel));
 
             //Adding a new observer example
             //lproc.addObserver(new ExampleParser(panel));
