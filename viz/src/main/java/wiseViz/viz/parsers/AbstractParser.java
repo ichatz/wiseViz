@@ -5,12 +5,7 @@ import wiseViz.viz.base.VizLink;
 import wiseViz.viz.base.VizNode;
 import wiseViz.viz.base.VizPanel;
 
-import java.awt.Color;
-import java.lang.Boolean;
-import java.lang.Exception;
-import java.lang.Float;
-import java.lang.Integer;
-import java.lang.String;
+import java.awt.*;
 import java.util.Observer;
 import java.util.StringTokenizer;
 
@@ -51,7 +46,7 @@ public abstract class AbstractParser implements Observer {
         }
 
         // Check if this node is already displayed
-        final int nodeId = convertNodeId(strNodeId);
+        final long nodeId = convertNodeId(strNodeId);
 
         if (parent.containsNode(nodeId)) {
             // already exists
@@ -65,13 +60,13 @@ public abstract class AbstractParser implements Observer {
             float posY = 100 + (totNodes / 4) * 250;
 
             // check if the node is supposed to be ignored
-            Boolean isIgnored = VizProperties.getInstance().getProperty(VizProperties.NODE_IGNORE + "0x" + Integer.toHexString(nodeId), false);
+            Boolean isIgnored = VizProperties.getInstance().getProperty(VizProperties.NODE_IGNORE + "0x" + Long.toHexString(nodeId), false);
             if (isIgnored) {
                 return node;
             }
 
             // try to load position of node
-            String strPos = VizProperties.getInstance().getProperty(VizProperties.NODE_POSITION + "0x" + Integer.toHexString(nodeId));
+            String strPos = VizProperties.getInstance().getProperty(VizProperties.NODE_POSITION + "0x" + Long.toHexString(nodeId));
             if (strPos != null) {
                 StringTokenizer stok = new StringTokenizer(strPos, ",");
                 posX = Float.parseFloat(stok.nextToken());
@@ -195,14 +190,16 @@ public abstract class AbstractParser implements Observer {
      * @param nodeId the node id (hex or decimal format) as a String.
      * @return the nodeId as decimal integer.
      */
-    protected int convertNodeId(final String nodeId) {
+    protected long convertNodeId(final String nodeId) {
         try {
             if (nodeId.indexOf("x") > 0) {
                 // in hex
-                return Integer.parseInt(nodeId.substring(2), 16);
+                return Long.parseLong(nodeId.substring(2), 16);
+            } else if (nodeId.length() > 4) {
+                return Long.parseLong(nodeId, 16);
             } else {
                 // in decimal
-                return Integer.parseInt(nodeId);
+                return Long.parseLong(nodeId);
             }
         } catch (Exception ex) {
             return 0;

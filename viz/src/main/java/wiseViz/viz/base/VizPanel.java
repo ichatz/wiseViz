@@ -1,20 +1,13 @@
 package wiseViz.viz.base;
 
-import wiseViz.viz.VizProperties;
-import wiseViz.viz.tasks.PulseNodeEvents;
-import wiseViz.viz.tasks.PulsePacketEvents;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
+import wiseViz.viz.VizProperties;
+import wiseViz.viz.tasks.PulseNodeEvents;
+import wiseViz.viz.tasks.PulsePacketEvents;
 
-import java.awt.Color;
-import java.lang.Double;
-import java.lang.Exception;
-import java.lang.Float;
-import java.lang.Integer;
-import java.lang.String;
-import java.lang.SuppressWarnings;
-import java.lang.System;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -99,7 +92,7 @@ public final class VizPanel extends PApplet {
     /**
      * Map of network nodes.
      */
-    private final Map<Integer, VizNode> nodes;
+    private final Map<Long, VizNode> nodes;
 
     /**
      * List of network links.
@@ -148,7 +141,7 @@ public final class VizPanel extends PApplet {
         screen.height = height;
 
         // Setup nodes & links
-        nodes = new TreeMap<Integer, VizNode>();
+        nodes = new TreeMap<Long, VizNode>();
         nodesList = new ArrayList<VizNode>();
         packetList = new ArrayList<VizPacket>();
         arduinoList = new ArrayList<VizArduinoNode>();
@@ -359,7 +352,7 @@ public final class VizPanel extends PApplet {
      * @param fontColor -- the external color of the font.
      * @return the VizNode representation.
      */
-    public final VizNode displayNode(final int identity,
+    public final VizNode displayNode(final long identity,
                                      final float initX,
                                      final float initY,
                                      final int thisColor,
@@ -372,7 +365,7 @@ public final class VizPanel extends PApplet {
                 fontColor); // Font color
 
         // try to load additional node properties
-        int posKeyLabel = VizProperties.getInstance().getProperty(VizProperties.NODE_KEYLABEL + "0x" + Integer.toHexString(identity), 0);
+        int posKeyLabel = VizProperties.getInstance().getProperty(VizProperties.NODE_KEYLABEL + "0x" + Long.toHexString(identity), 0);
         node.setPosKeyLabel(posKeyLabel);
 
         synchronized (nodes) {
@@ -434,10 +427,10 @@ public final class VizPanel extends PApplet {
                 link = new VizLink(this, srcNode, tgtNode, linkType);
                 links.put(linkID1, link);
                 // don't store GKE_SL links in node's queue for sending msgs!
-                if(linkType != VizLink.LINK_SL) {
-	                srcNode.addLink(tgtNode.getId(), link);
-        	        tgtNode.addLink(srcNode.getId(), link);
-        	}
+                if (linkType != VizLink.LINK_SL) {
+                    srcNode.addLink(tgtNode.getId(), link);
+                    tgtNode.addLink(srcNode.getId(), link);
+                }
             }
         }
         return link;
@@ -494,10 +487,10 @@ public final class VizPanel extends PApplet {
      * @param nodeId the identity of the node to retrieve.
      * @return the VizNode that correspond to the given nodeID.
      */
-    public VizNode getArduinoNode(final int nodeId) {
+    public VizNode getArduinoNode(final long nodeId) {
         VizNode thisNode = null;
         synchronized (arduinoList) {
-            thisNode = arduinoList.get(nodeId);
+            thisNode = arduinoList.get((int) nodeId);
         }
         return thisNode;
     }
@@ -508,7 +501,7 @@ public final class VizPanel extends PApplet {
      * @param nodeId the identity of the node to retrieve.
      * @return the VizNode that correspond to the given nodeID.
      */
-    public VizNode getNode(final int nodeId) {
+    public VizNode getNode(final long nodeId) {
         VizNode thisNode = null;
         synchronized (nodes) {
             thisNode = nodes.get(nodeId);
@@ -522,7 +515,7 @@ public final class VizPanel extends PApplet {
      * @param nodeId the identity of the node to retrieve.
      * @return true if it is registered, otherwise false.
      */
-    public boolean containsNode(final int nodeId) {
+    public boolean containsNode(final long nodeId) {
         boolean exists = false;
         synchronized (nodes) {
             exists = nodes.containsKey(nodeId);

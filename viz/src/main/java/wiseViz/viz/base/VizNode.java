@@ -90,7 +90,7 @@ public class VizNode {
     /**
      * The identity of the node.
      */
-    private final int id;
+    private final long id;
 
     /**
      * The identity of the node in Hex.
@@ -119,7 +119,7 @@ public class VizNode {
     /**
      * Map of the outgoing links per destination node.
      */
-    private HashMap<Integer, VizLink> outLinks;
+    private HashMap<Long, VizLink> outLinks;
 
     /**
      * If the node is enabled or not.
@@ -154,7 +154,7 @@ public class VizNode {
      * @param fontColor -- the external color of the font.
      */
     VizNode(final VizPanel panel,
-            final int identity,
+            final long identity,
             final float initX,
             final float initY,
             final int size,
@@ -163,7 +163,7 @@ public class VizNode {
             final int fontColor) {
         parent = panel;
         id = identity;
-        hexId = "0x" + Integer.toHexString(id);
+        hexId = "0x" + Long.toHexString(id);
         posX = initX;
         posY = initY;
         colorInt = thisColor;
@@ -189,7 +189,7 @@ public class VizNode {
         clusterHead = false;
 
         // Initialize outgoing links
-        outLinks = new HashMap<Integer, VizLink>();
+        outLinks = new HashMap<Long, VizLink>();
     }
 
     /**
@@ -197,7 +197,7 @@ public class VizNode {
      *
      * @return the identity of the node.
      */
-    public int getId() {
+    public long getId() {
         return id;
     }
 
@@ -346,7 +346,7 @@ public class VizNode {
      * @param destID the destination ID.
      * @param link   the actual link.
      */
-    public void addLink(final int destID, final VizLink link) {
+    public void addLink(final long destID, final VizLink link) {
         outLinks.put(destID, link);
     }
 
@@ -355,11 +355,11 @@ public class VizNode {
      *
      * @param destID the destination ID.
      */
-    public void removeLink(final int destID) {
+    public void removeLink(final long destID) {
         outLinks.remove(destID);
     }
 
-    public VizLink getLink(final int destID) {
+    public VizLink getLink(final long destID) {
         return outLinks.get(destID);
     }
 

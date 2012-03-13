@@ -12,24 +12,22 @@ import java.util.Date;
  * Time: 6:48 PM
  */
 public class SpitfireMessage implements Message {
-    private static String SEPARATOR = "\\[";
-    private static int TIME = 1;
-    private static int PROTOCOL = 2;
-    private static int DESTINATION = 3;
-    private static int SRC_MAC = 4;
-    private static int DST_MAC = 5;
-    private static int SRC_IP = 6;
-    private static int DST_IP = 7;
-    private static int TRANSPORT = 8;
-    private static int APPLICATION = 9;
-    private static int PAYLOAD = 10;
+    private static String SEPARATOR = "\\]";
+    private static int TIME = 0;
+    private static int PROTOCOL = 1;
+    private static int DESTINATION = 2;
+    private static int SRC_MAC = 3;
+    private static int DST_MAC = 4;
+    private static int SRC_IP = 5;
+    private static int DST_IP = 6;
+    private static int TRANSPORT = 7;
+    private static int APPLICATION = 8;
+    private static int PAYLOAD = 9;
 
     private String[] message;
 
     public SpitfireMessage(String text) {
         this.message = text.split(SEPARATOR);
-        System.out.println("text is :" + text);
-        System.out.println("size is " + message.length);
     }
 
     public Date getTimestamp() {
@@ -85,16 +83,7 @@ public class SpitfireMessage implements Message {
         return deframeText(message[PAYLOAD]);
     }
 
-    public String getNodeId() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public String getText() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     private String deframeText(final String string) {
-
-        return string.substring(0, string.length() - 1);
+        return string.substring(1);
     }
 }

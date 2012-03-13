@@ -2,7 +2,9 @@ package wiseViz.viz;
 
 
 import wiseViz.viz.base.VizPanel;
-import wiseViz.viz.parsers.spitfire.SpitfireTestObserver;
+import wiseViz.viz.parsers.spitfire.message.CoapParser;
+import wiseViz.viz.parsers.spitfire.message.DymoParser;
+import wiseViz.viz.parsers.spitfire.message.RaRsParser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -109,7 +111,9 @@ public class VizFRONTS extends JFrame {
             lproc.addObserver(new SemanticGroupsParser(panel));    // WROC hack :]
             lproc.addObserver(new SemanticGroupsParser(panel));
             */
-            lproc.addObserver(new SpitfireTestObserver(panel));
+            lproc.addObserver(new CoapParser(panel));
+            lproc.addObserver(new RaRsParser(panel));
+            lproc.addObserver(new DymoParser(panel));
 
             //Adding a new observer example
             //lproc.addObserver(new ExampleParser(panel));

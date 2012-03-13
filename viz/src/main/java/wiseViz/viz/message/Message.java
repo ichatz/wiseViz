@@ -12,10 +12,6 @@ public interface Message {
 
     public Date getTimestamp();
 
-    public String getNodeId();
-
-    public String getText();
-
     public String getProtocol();
 
     public boolean getDestination();

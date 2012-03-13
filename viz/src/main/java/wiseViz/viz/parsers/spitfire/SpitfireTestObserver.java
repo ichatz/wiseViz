@@ -1,11 +1,8 @@
 package wiseViz.viz.parsers.spitfire;
 
-import wiseViz.viz.base.VizNode;
 import wiseViz.viz.base.VizPanel;
-import wiseViz.viz.message.SpitfireMessage;
 import wiseViz.viz.parsers.AbstractParser;
 
-import java.awt.*;
 import java.util.Observable;
 
 /**
@@ -26,27 +23,35 @@ public class SpitfireTestObserver extends AbstractParser {
     }
 
     public void update(Observable observable, Object o) {
-        if (!(o instanceof String)) {
-            return;
-        }
-
-        SpitfireMessage message = new SpitfireMessage((String) o);
-
-        final VizNode thisNode = displayNode(message.getSrcIP());
-        final VizNode otherNode = displayNode(message.getDstIP());
-
-        if (thisNode != null) {
-            // Make sure node is not a head
-            thisNode.setClusterHead(false);
-
-            // Assign same color with head
-            thisNode.setColorInt(Color.WHITE.getRGB());
-            thisNode.setAggregatedValue("");
-            thisNode.setSensorValue("");
-            thisNode.setEnabled(true);
-        }
-
+//        if (!(o instanceof String)) {
+//            return;
+//        }
+//
+//        SpitfireMessage message = new SpitfireMessage((String) o);
+//
+//        final VizNode thisNode = displayNode(message.getSrcMac());
+//        final VizNode otherNode = displayNode(message.getDstMac());
+//
+//        VizLink link = displayLink(thisNode, otherNode, VizLink.LINK_BI);
+//
+//        thisNode.sendPacket(link, Color.blue.getRGB(), 16, thisNode, otherNode);
+//
+//
+//        System.out.println(thisNode.getId());
+//        System.out.println(otherNode.getId());
+////
+////        if (thisNode != null) {
+////            Make sure node is not a head
+////            thisNode.setClusterHead(false);
+////
+////            Assign same color with head
+////            thisNode.setColorInt(Color.WHITE.getRGB());
+////            thisNode.setAggregatedValue("");
+////            thisNode.setSensorValue("");
+////            thisNode.setEnabled(true);
+////        }
+//
 //        System.out.println(message.getApplication());
-//        System.out.println(message.getDstIP());
+////        System.out.println(message.getDstIP());
     }
 }

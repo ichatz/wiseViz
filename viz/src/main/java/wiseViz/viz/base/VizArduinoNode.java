@@ -77,7 +77,7 @@ public final class VizArduinoNode extends VizNode {
         super.display();
 
 
-        switch (getId()) {
+        switch ((int) getId()) {
             case 0:
                 getParent().image(bgmap, getPosX() - 170, getPosY() - 30);
                 getParent().image(imgBulb, getPosX() - 112, getPosY() - 45);

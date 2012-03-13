@@ -9,7 +9,7 @@
     <!--    <property name="logfile" value="/home/amaxilatis/Documents/Dropbox/tr.assembly/scripts/trace2.out"/> -->
 
     <property name="logfile" value="net10.txt"/>
-    <property name="delay" value="1"/>
+    <property name="delay" value="100"/>
     <property name="propfile" value="./properties/template.properties"/>
 
     <!--

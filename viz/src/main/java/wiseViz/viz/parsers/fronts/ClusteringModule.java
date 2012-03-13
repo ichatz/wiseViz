@@ -101,7 +101,7 @@ public class ClusteringModule extends AbstractParser {
 
                 // Hard-coded correlation of Arduino nodes
                 VizNode arduinoNode = null;
-                switch (fromNode.getId()) {
+                switch ((int) fromNode.getId()) {
                     case 378:
                         arduinoNode = super.parent.getNode(0);
                         arduinoNode.setColorInt(fromNode.getColorInt());
@@ -133,7 +133,7 @@ public class ClusteringModule extends AbstractParser {
 
             // Hard-coded correlation of Arduino nodes
             VizNode arduinoNode = null;
-            switch (fromNode.getId()) {
+            switch ((int) fromNode.getId()) {
                 case 378:
                     arduinoNode = super.parent.getNode(0);
                     arduinoNode.setColorInt(fromNode.getColorInt());

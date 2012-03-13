@@ -38,7 +38,6 @@ public class LogObserver extends Observable implements Runnable {
      * to create a thread, starting the thread causes the object's
      * <code>run</code> method to be called in that separately executing
      * thread.
-     * <p/>
      * The general contract of the method <code>run</code> is that it may
      * take any action whatsoever.
      *
@@ -47,17 +46,28 @@ public class LogObserver extends Observable implements Runnable {
     public void run() {
         try {
             Thread.sleep(3000);
+            StringBuilder line = new StringBuilder();
             while (true) {
-                final String line = bread.readLine();
-                if ((line != null) && (line.length() > 0)) {
-                    setChanged();
-                    try {
-                        notifyObservers(line);
-                    } catch (Exception ex) {
-                        System.out.println("--||" + line + "||--");
-                        ex.printStackTrace();
-                        System.out.println("---------");
+                final String rline = bread.readLine();
+                if ((rline != null) && (rline.length() > 0)) {
+                    line.append(rline);
+
+                    if (line.toString().endsWith("]")) {
+//                        System.out.println("line ends normally");
+//                        System.out.println("--||" + line.toString() + "||--");
+                        setChanged();
+                        try {
+                            notifyObservers(line.toString());
+                        } catch (Exception ex) {
+                            System.out.println("--||" + line.toString() + "||--");
+                            ex.printStackTrace();
+                            System.out.println("---------");
+                        }
+                        line = new StringBuilder();
+                    } else {
+//                        System.out.println("line ends with new line");
                     }
+
 
                 }
                 Thread.sleep(delay);
