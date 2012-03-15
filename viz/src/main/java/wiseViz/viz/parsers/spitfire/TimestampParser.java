@@ -1,12 +1,9 @@
-package wiseViz.viz.parsers.tinyRPL;
+package wiseViz.viz.parsers.spitfire;
 
 import wiseViz.viz.base.VizPanel;
+import wiseViz.viz.message.SpitfireMessage;
 import wiseViz.viz.parsers.AbstractParser;
 
-import java.lang.Double;
-import java.lang.Exception;
-import java.lang.Object;
-import java.lang.String;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,14 +12,14 @@ import java.util.Observable;
 /**
  * Parses the timestamps of the traces.
  */
+
 public class TimestampParser
         extends AbstractParser {
 
-    private final String TIME_FORMAT_OUT = "yyyy-MM-dd  HH:mm:ss";
-
-    private Date lastSeen;
-
+    private Date lastTime;
+    private final String TIME_FORMAT_OUT = "HH:mm:ss";
     private final DateFormat dataVisualizer;
+
 
     /**
      * Default constructor.
@@ -31,8 +28,9 @@ public class TimestampParser
      */
     public TimestampParser(final VizPanel vPanel) {
         super(vPanel);
+        lastTime = null;
         dataVisualizer = new SimpleDateFormat(TIME_FORMAT_OUT);
-        lastSeen = new Date(0);
+
     }
 
 
@@ -47,33 +45,29 @@ public class TimestampParser
      *            method.
      */
     public void update(final Observable obj, final Object arg) {
-        final String line = (String) arg;
-
-        // locate first and second space
-        final int startOfTag = line.indexOf(' ') + 1;
-        final int endOfTag = line.indexOf(' ', startOfTag + 1);
-
-        if (startOfTag < 1 || endOfTag < 1) {
+        if (!(arg instanceof String)) {
             return;
         }
 
-        // Extract timestamp
-        final String strTimeTag = line.substring(startOfTag, endOfTag);
+        SpitfireMessage message = new SpitfireMessage((String) arg);
+        if (message.isValid()) {
 
-        // Try to convert timestamp
-        try {
-            final Double timeLong = Double.parseDouble(strTimeTag);
-            final Date timeTag = new Date((long) timeLong.doubleValue() * 1000);
-            if (timeTag.getTime() > lastSeen.getTime()) {
-                // keep last known time tag
-                lastSeen = timeTag;
-
+            try {
+                if (lastTime == null) {
+                    lastTime = message.getTimestamp();
+                }
+                if (message.getTimestamp().before(lastTime))
+                    return;
+                lastTime = message.getTimestamp();
                 // Format time tag & display
-                parent.setLastDateTag(dataVisualizer.format(lastSeen));
+                parent.setLastDateTag(dataVisualizer.format(lastTime));
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } else {
+
         }
     }
-
 }
+
+

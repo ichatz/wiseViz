@@ -11,25 +11,19 @@ import java.util.Date;
  * Date: 2/21/12
  * Time: 6:48 PM
  */
-public class SpitfireMessage implements Message {
-    private static String SEPARATOR = "\\]";
-    private static int TIME = 0;
-    private static int PROTOCOL = 1;
-    private static int DESTINATION = 2;
-    private static int SRC_MAC = 3;
-    private static int DST_MAC = 4;
-    private static int SRC_IP = 5;
-    private static int DST_IP = 6;
-    private static int TRANSPORT = 7;
-    private static int APPLICATION = 8;
-    private static int PAYLOAD = 9;
+public class TRMessage implements Message {
+    private static String SEPARATOR = "]";
+    private static int SRC_URN = 0;
+    private static int PAYLOAD = 1;
+    private static int LEVEL = 2;
+    private static int TIME = 3;
 
     private String[] message;
-
     private final boolean valid;
 
-    public SpitfireMessage(String text) {
-        if (text.startsWith("[") && text.split(SEPARATOR).length == 10) {
+
+    public TRMessage(String text) {
+        if (text.startsWith("Source [") && text.split(SEPARATOR).length == 4) {
             valid = true;
             this.message = text.split(SEPARATOR);
         } else {
@@ -50,40 +44,35 @@ public class SpitfireMessage implements Message {
     }
 
     public String getProtocol() {
-        return deframeText(message[PROTOCOL]);
+        return deframeText(message[LEVEL]);
     }
 
     public boolean getDestination() {
-        final String tempStr = deframeText(message[DESTINATION]);
-
-        if ("IN".equals(tempStr)) {
-            return true;
-        }
         return false;
     }
 
     public String getSrcMac() {
-        return deframeText(message[SRC_MAC]);
+        return deframeText(message[SRC_URN]);
     }
 
     public String getDstMac() {
-        return deframeText(message[DST_MAC]);
+        return "";
     }
 
     public String getSrcIP() {
-        return deframeText(message[SRC_IP]);
+        return "";
     }
 
     public String getDstIP() {
-        return deframeText(message[DST_IP]);
+        return "";
     }
 
     public String getTransport() {
-        return deframeText(message[TRANSPORT]);
+        return "";
     }
 
     public String getApplication() {
-        return deframeText(message[APPLICATION]);
+        return "";
     }
 
     public String getPayload() {
@@ -91,14 +80,15 @@ public class SpitfireMessage implements Message {
     }
 
     public boolean isValid() {
-        return valid;
+        return valid;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public int getPayloadLength() {
-        return (deframeText(message[PAYLOAD]).length() < 10) ? deframeText(message[PAYLOAD]).length() : 10;
+        return deframeText(message[PAYLOAD]).length();
     }
 
     private String deframeText(final String string) {
-        return string.substring(1);
+//        System.out.println("STring "+string.indexOf("[")+" is "+string);
+        return string.substring(string.indexOf("["));
     }
 }

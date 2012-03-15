@@ -21,7 +21,8 @@ public class TimestampParser
 
     private final String TIME_FORMAT_IN = "yyyy-MM-dd'T'HH:mm:ss";
 
-    private final String TIME_FORMAT_OUT = "yyyy-MM-dd  HH:mm:ss";
+//    private final String TIME_FORMAT_OUT = "yyyy-MM-dd  HH:mm:ss";
+    private final String TIME_FORMAT_OUT = "HH:mm:ss";
 
     private Date lastSeen;
 

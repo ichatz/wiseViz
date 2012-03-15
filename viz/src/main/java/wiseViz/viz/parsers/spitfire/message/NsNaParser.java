@@ -31,12 +31,13 @@ public class NsNaParser extends AbstractParser {
         }
 
         SpitfireMessage message = new SpitfireMessage((String) arg);
+        if (!message.isValid()) return;
 
         if ("NS".equals(message.getApplication())||"NA".equals(message.getApplication())) {
 
             final VizNode thisNode = displayNode(message.getSrcMac());
             if ("000000000000ffff".equals(message.getDstMac())) {
-                thisNode.bcastEvent(Color.white.getRGB(), message.getPayload().length() * 10, "");
+                thisNode.bcastEvent(Color.white.getRGB(), message.getPayloadLength() , "");
             } else {
                 final VizNode otherNode = displayNode(message.getDstMac());
 

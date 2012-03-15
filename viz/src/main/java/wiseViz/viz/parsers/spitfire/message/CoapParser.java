@@ -31,13 +31,14 @@ public class CoapParser extends AbstractParser {
         }
 
         SpitfireMessage message = new SpitfireMessage((String) arg);
+        if (!message.isValid()) return;
 
         if ("COAP".equals(message.getApplication())) {
             System.out.println(message.getPayload().length());
 
             final VizNode thisNode = displayNode(message.getSrcMac());
             if ("000000000000ffff".equals(message.getDstMac())) {
-                thisNode.bcastEvent(Color.blue.getRGB(), message.getPayload().length()*10, "");
+                thisNode.bcastEvent(Color.blue.getRGB(), message.getPayloadLength(), "");
             } else {
                 final VizNode otherNode = displayNode(message.getDstMac());
                 VizLink link = displayLink(thisNode, otherNode, VizLink.LINK_BI);

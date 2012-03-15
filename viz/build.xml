@@ -8,7 +8,7 @@
 
     <!--    <property name="logfile" value="/home/amaxilatis/Documents/Dropbox/tr.assembly/scripts/trace2.out"/> -->
 
-    <property name="logfile" value="net10.txt"/>
+    <property name="logfile" value="net10.txt,node1.txt,node2.txt,/home/amaxilatis/Documents/Dropbox/tr.assembly/tr.scripts/traces/trace.out"/>
     <property name="delay" value="100"/>
     <property name="propfile" value="./properties/template.properties"/>
 
@@ -60,6 +60,19 @@
             </manifest>
         </jar>
     </target>
+
+    <target name="runSPITFIRE" depends="jar">
+        <java classname="wiseViz.viz.VizSPITFIRE" fork="true">
+            <classpath>
+                <path refid="libraries"/>
+                <path location="${outdir}/wiseViz.jar"/>
+            </classpath>
+            <arg value="${logfile}"/>
+            <arg value="${delay}"/>
+            <arg value="${propfile}"/>
+        </java>
+    </target>
+
 
     <target name="runFRONTS" depends="jar">
         <java classname="wiseViz.viz.VizFRONTS" fork="true">

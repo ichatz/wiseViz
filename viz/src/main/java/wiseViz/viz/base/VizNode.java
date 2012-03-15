@@ -5,6 +5,7 @@ import processing.core.PApplet;
 import java.awt.*;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.SortedSet;
 
 /**
@@ -107,6 +108,10 @@ public class VizNode {
      */
     private String sensorValue;
     /**
+     * The sensor value.
+     */
+    private Map<String, String> sensorValues;
+    /**
      * The semantic groups.
      */
     private HashMap<String, String> semanticGroups;
@@ -172,6 +177,7 @@ public class VizNode {
         alphaInt = 150;
         alphaStroke = 250;
         sensorValue = "";
+        sensorValues = new HashMap<String, String>();
         semanticGroups = new HashMap<String, String>();
         aggregatedValue = "";
         isEnabled = true;
@@ -305,6 +311,15 @@ public class VizNode {
         final String semantic = group.substring(0, group.indexOf("-"));
         final String groupid = group.substring(group.indexOf("-"));
         this.semanticGroups.put(semantic, groupid + ":" + gparent);
+    }
+
+    public void addSensorValue(final String sensor, final String value) {
+        this.sensorValues.put(sensor, value);
+        final StringBuilder sensorValueBuilder = new StringBuilder();
+        for (String sensKey : sensorValues.keySet()) {
+            sensorValueBuilder.append(sensKey).append("=").append(sensorValues.get(sensKey)).append("\n");
+        }
+        sensorValue = sensorValueBuilder.toString();
     }
 
     public void setAggregatedValue(final String value) {

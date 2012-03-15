@@ -23,10 +23,10 @@ public class SpitfireTestObserver extends AbstractParser {
     }
 
     public void update(Observable observable, Object o) {
-//        if (!(o instanceof String)) {
-//            return;
-//        }
-//
+        if (!(o instanceof String)) {
+            return;
+        }
+
 //        SpitfireMessage message = new SpitfireMessage((String) o);
 //
 //        final VizNode thisNode = displayNode(message.getSrcMac());

@@ -8,8 +8,11 @@ import wiseViz.viz.tasks.PulseNodeEvents;
 import wiseViz.viz.tasks.PulsePacketEvents;
 
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.Timer;
@@ -68,7 +71,7 @@ public final class VizPanel extends PApplet {
     /**
      * Background image.
      */
-    private final PImage bgmap;
+    private final List<PImage> bgmap;
 
     /**
      * The x and y coordinates of the image.
@@ -131,6 +134,9 @@ public final class VizPanel extends PApplet {
     private int selectedArduinoPos;
 
     private float prevX, prevY, stepChange;
+    private final boolean loopImages;
+    private int bgmapIndex;
+    private int timeRate = 0;
 
     /**
      * Default constructor.
@@ -145,6 +151,8 @@ public final class VizPanel extends PApplet {
         nodesList = new ArrayList<VizNode>();
         packetList = new ArrayList<VizPacket>();
         arduinoList = new ArrayList<VizArduinoNode>();
+        bgmap = new ArrayList<PImage>();
+
         links = new HashMap<Double, VizLink>();
         lastDateTag = "";
         selectedNodePos = -1;
@@ -154,11 +162,31 @@ public final class VizPanel extends PApplet {
         stepChange = 5;
 
         selectedNode = null;
+
         showBGMap = VizProperties.getInstance().getProperty(VizProperties.MAP_ENABLE, false);
+        loopImages = VizProperties.getInstance().getProperty(VizProperties.LOOP_IMAGES, false);
+        bgmapIndex = 0;
+
         if ((showBGMap) && (VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, "").length() > 0)) {
-            bgmap = loadImage(VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, ""));
+
+            if (VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, "").endsWith("/")) {
+                final File path = new File(VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, ""));
+                List<String> files = new ArrayList<String>();
+                for (File file : path.listFiles()) {
+                    files.add(file.getAbsolutePath());
+                }
+                Collections.sort(files);
+                for (String file : files) {
+                    System.out.println(file);
+                    bgmap.add(loadImage(file));
+                }
+            } else {
+                System.out.println("this is not a path");
+                bgmap.add(loadImage(VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, "")));
+            }
+
         } else {
-            bgmap = null;
+
         }
 
         nodeSize = VizProperties.getInstance().getProperty(VizProperties.NODE_SIZE, DEFAULT_NODE_SIZE);
@@ -202,16 +230,18 @@ public final class VizPanel extends PApplet {
     private void setupBGMap() {
         // resize bg image
         if (showBGMap) {
-            bgmap.resize(screen.width, 0);
-            if (bgmap.height > screen.height) {
-                bgmap.resize(0, screen.height);
+            for (PImage img : bgmap) {
+                img.resize(screen.width, 0);
+                if (img.height > screen.height) {
+                    img.resize(0, screen.height);
+                }
             }
 
-            scaleX = (float) bgmap.width / origX;
-            scaleY = (float) bgmap.height / origY;
+            scaleX = (float) bgmap.get(bgmapIndex).width / origX;
+            scaleY = (float) bgmap.get(bgmapIndex).height / origY;
 
-            offsetX = (screen.width - bgmap.width) / 2;
-            offsetY = (screen.height - bgmap.height) / 2;
+            offsetX = (screen.width - bgmap.get(bgmapIndex).width) / 2;
+            offsetY = (screen.height - bgmap.get(bgmapIndex).height) / 2;
 
         } else {
             scaleX = screen.width / origX;
@@ -230,6 +260,19 @@ public final class VizPanel extends PApplet {
             // Send ND packets
             timer.scheduleAtFixedRate(new PulsePacketEvents(this), FLUSH_SPEED_PKT, FLUSH_SPEED_PKT);
 
+//            //change bg
+//            timer.scheduleAtFixedRate(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    if (showBGMap) {
+//                        background(255);
+//                        fill(0);
+//                        image(bgmap.get(bgmapIndex), offsetX, offsetY);
+//                    }
+//                    bgmapIndex++;
+//                }
+//            }, 1000, 1000);
+
             // Process camera
             //timer.scheduleAtFixedRate(new OpenCVTask(this), 3000, FLUSH_SPEED_LNK);
 
@@ -245,16 +288,24 @@ public final class VizPanel extends PApplet {
         if (showBGMap) {
             background(255);
             fill(0);
-            image(bgmap, offsetX, offsetY);
+            image(bgmap.get(bgmapIndex), offsetX, offsetY);
         } else {
             background(0);
             fill(255);
+        }
+        timeRate++;
+        this.setLastDateTag(bgmapIndex + ":00");
+        if (timeRate == 10) {
+            bgmapIndex++;
+            bgmapIndex = bgmapIndex % bgmap.size();
+            timeRate = 0;
         }
 
         // Draw Date & Time of last tag
         textAlign(RIGHT);
         textSize(18);
-        text(lastDateTag, 700, 30);
+        fill(255);
+        text(lastDateTag, 100, 30);
         textSize(16);
 
         // Draw the network elements
@@ -634,7 +685,7 @@ public final class VizPanel extends PApplet {
 
                     // make sure that the bg image is saved
                     if (bgmap != null) {
-                        VizProperties.getInstance().setProperty(VizProperties.SCREEN_SIZE, bgmap.width + "," + bgmap.height);
+                        VizProperties.getInstance().setProperty(VizProperties.SCREEN_SIZE, bgmap.get(bgmapIndex).width + "," + bgmap.get(bgmapIndex).height);
                     } else {
                         VizProperties.getInstance().setProperty(VizProperties.SCREEN_SIZE, screen.width + "," + screen.height);
                     }
@@ -767,5 +818,4 @@ public final class VizPanel extends PApplet {
     public int getOffsetY() {
         return offsetY;
     }
-
 }

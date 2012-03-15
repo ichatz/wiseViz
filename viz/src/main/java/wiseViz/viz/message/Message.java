@@ -30,4 +30,6 @@ public interface Message {
 
     public String getPayload();
 
+    public boolean isValid();
+
 }

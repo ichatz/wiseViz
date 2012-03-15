@@ -1,4 +1,4 @@
-package wiseViz.viz.parsers.spitfire.message;
+package wiseViz.viz.parsers.spitfire;
 
 import wiseViz.viz.base.VizLink;
 import wiseViz.viz.base.VizNode;
@@ -15,13 +15,13 @@ import java.util.Observable;
  * Date: 2/23/12
  * Time: 2:02 PM
  */
-public class DymoParser extends AbstractParser {
+public class RaRsParser extends AbstractParser {
     /**
      * Default constructor.
      *
      * @param vPanel the vizualization panel.
      */
-    public DymoParser(final VizPanel vPanel) {
+    public RaRsParser(final VizPanel vPanel) {
         super(vPanel);
     }
 
@@ -33,18 +33,18 @@ public class DymoParser extends AbstractParser {
         SpitfireMessage message = new SpitfireMessage((String) arg);
         if (!message.isValid()) return;
 
-        if ("DYMO".equals(message.getApplication())) {
+        if ("RA".equals(message.getApplication()) || "RS".equals(message.getApplication())) {
 
             final VizNode thisNode = displayNode(message.getSrcMac());
             if ("000000000000ffff".equals(message.getDstMac())) {
-                thisNode.bcastEvent(Color.yellow.getRGB(), message.getPayloadLength() , "");
+                thisNode.bcastEvent(Color.green.getRGB(), message.getPayloadLength(), "");
             } else {
                 final VizNode otherNode = displayNode(message.getDstMac());
 
                 VizLink link = displayLink(thisNode, otherNode, VizLink.LINK_BI);
 
 
-                thisNode.sendPacket(link, Color.yellow.getRGB(), message.getPayload().length(), thisNode, otherNode);
+                thisNode.sendPacket(link, Color.green.getRGB(), message.getPayload().length(), thisNode, otherNode);
             }
         }
     }
