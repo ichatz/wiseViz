@@ -29,20 +29,26 @@ public class CoapParser extends AbstractParser {
         if (!(arg instanceof String)) {
             return;
         }
-
         SpitfireMessage message = new SpitfireMessage((String) arg);
-        if (!message.isValid()) return;
 
+        if (!message.isValid()) return;
         if ("COAP".equals(message.getApplication())) {
-            System.out.println(message.getPayload().length());
+
 
             final VizNode thisNode = displayNode(message.getSrcMac());
             if ("000000000000ffff".equals(message.getDstMac())) {
                 thisNode.bcastEvent(Color.blue.getRGB(), message.getPayloadLength(), "");
             } else {
                 final VizNode otherNode = displayNode(message.getDstMac());
+
                 VizLink link = displayLink(thisNode, otherNode, VizLink.LINK_BI);
-                thisNode.sendPacket(link, Color.blue.getRGB(), message.getPayload().length(), thisNode, otherNode);
+                if (!thisNode.getHexId().equals(link.getSource().getHexId()) 
+                        || !otherNode.getHexId().equals(link.getTarget().getHexId())) {
+                    System.out.println("!!!!!!!!!!!");
+                    System.out.println("Coap message " + thisNode.getHexId()+ "->" + otherNode.getHexId()+ ":" + message.getPayloadLength());
+                    System.out.println("Coap message " + link.getSource().getHexId()+ "->" + link.getTarget().getHexId()+ ":" + message.getPayloadLength());
+                }
+                thisNode.sendPacket(link, Color.blue.getRGB(), message.getPayloadLength(), thisNode, otherNode);
             }
         }
     }

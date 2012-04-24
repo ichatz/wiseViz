@@ -100,7 +100,7 @@ public final class VizPanel extends PApplet {
     /**
      * List of network links.
      */
-    private final Map<Double, VizLink> links;
+    private final Map<String, VizLink> links;
 
     /**
      * Frames change timer.
@@ -153,7 +153,7 @@ public final class VizPanel extends PApplet {
         arduinoList = new ArrayList<VizArduinoNode>();
         bgmap = new ArrayList<PImage>();
 
-        links = new HashMap<Double, VizLink>();
+        links = new HashMap<String, VizLink>();
         lastDateTag = "";
         selectedNodePos = -1;
         selectedArduinoPos = -1;
@@ -452,8 +452,8 @@ public final class VizPanel extends PApplet {
      * @return the VizLink representation.
      */
     public final VizLink displayLink(final VizNode srcNode, final VizNode tgtNode, final int linkType) {
-        final double linkID1 = Double.parseDouble(srcNode.getId() + "." + tgtNode.getId());
-        //final double linkID2 = Double.parseDouble(tgtNode.getId() + "." + srcNode.getId());
+        final String linkID1 = srcNode.getId() + "." + tgtNode.getId();
+//        final double linkID2 = Double.parseDouble(tgtNode.getId() + "." + srcNode.getId());
         VizLink link = null;
 
         if ((srcNode.getId() == 0) || (tgtNode.getId() == 0)) {
@@ -468,12 +468,12 @@ public final class VizPanel extends PApplet {
                 link.setType(linkType);
                 link.fireEvent();
 
-/*            } else if (links.containsKey(linkID2)) {
-                // already exists
-                link = links.get(linkID2);
-                link.setType(linkType);
-                link.fireEvent();
-*/
+//            } else if (links.containsKey(linkID2)) {
+//                // already exists
+//                link = links.get(linkID2);
+//                link.setType(linkType);
+//                link.fireEvent();
+
             } else {
                 link = new VizLink(this, srcNode, tgtNode, linkType);
                 links.put(linkID1, link);

@@ -29,12 +29,13 @@ public class SpitfireMessage implements Message {
     private final boolean valid;
 
     public SpitfireMessage(String text) {
-        if (text.startsWith("[") && text.split(SEPARATOR).length == 10) {
+        if (text.startsWith("[") && text.split(SEPARATOR).length >= 10) {
             valid = true;
             this.message = text.split(SEPARATOR);
         } else {
             valid = false;
         }
+
     }
 
     public Date getTimestamp() {
@@ -83,11 +84,16 @@ public class SpitfireMessage implements Message {
     }
 
     public String getApplication() {
+        System.out.println(message.length);
         return deframeText(message[APPLICATION]);
     }
 
     public String getPayload() {
-        return deframeText(message[PAYLOAD]);
+        if (getApplication().equals("COAP")) {
+            return deframeText(message[PAYLOAD + 1]);
+        } else {
+            return deframeText(message[PAYLOAD]);
+        }
     }
 
     public boolean isValid() {
@@ -95,7 +101,20 @@ public class SpitfireMessage implements Message {
     }
 
     public int getPayloadLength() {
-        return (deframeText(message[PAYLOAD]).length() < 10) ? deframeText(message[PAYLOAD]).length() : 10;
+        if (getApplication().equals("COAP")) {
+            int size = deframeText(message[PAYLOAD + 1]).length();
+            if (size > 500 / 8) {
+                size = 500 / 6;
+            }
+            if (size == 0) {
+                size = 5;
+
+            }
+            return size;
+        } else {
+            return deframeText(message[PAYLOAD]).length();
+        }
+//        return (deframeText(message[PAYLOAD]).length() < 10) ? deframeText(message[PAYLOAD]).length() : 10;
     }
 
     private String deframeText(final String string) {
