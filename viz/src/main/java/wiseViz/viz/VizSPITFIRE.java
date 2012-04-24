@@ -7,6 +7,7 @@ import wiseViz.viz.parsers.spitfire.message.CoapParser;
 import wiseViz.viz.parsers.spitfire.message.DymoParser;
 import wiseViz.viz.parsers.spitfire.message.NsNaParser;
 import wiseViz.viz.parsers.spitfire.message.RaRsParser;
+import wiseViz.viz.parsers.spitfire.message.RoutingParser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -97,6 +98,7 @@ public class VizSPITFIRE extends JFrame {
                 lproc.addObserver(new DymoParser(panel));
                 lproc.addObserver(new NsNaParser(panel));
                 lproc.addObserver(new TRSensorParser(panel));
+                lproc.addObserver(new RoutingParser(panel));
                 //lproc.addObserver(new wiseViz.viz.parsers.fronts.TimestampParser(panel));
 
                 //Adding a new observer example
