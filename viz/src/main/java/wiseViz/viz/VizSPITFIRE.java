@@ -69,7 +69,7 @@ public class VizSPITFIRE extends JFrame {
         //setSize(dim.width, dim.height);
         //setSize(1410, 864);
 //        setSize(dim.width, dim.height);
-        setSize(2048, 768);
+        setSize(1024, 768);
 
         //setLocation(-1366,0);
 
@@ -80,7 +80,7 @@ public class VizSPITFIRE extends JFrame {
         getContentPane().setBackground(Color.black);
 
         // Processing panel for visual output.
-        final VizPanel panel = new VizPanel(2048, 768);
+        final VizPanel panel = new VizPanel(1024, 768);
         panel.init();
 
         this.add(panel);

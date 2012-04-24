@@ -295,7 +295,7 @@ public final class VizPanel extends PApplet {
         }
         timeRate++;
         this.setLastDateTag(bgmapIndex + ":00");
-        if (timeRate == 10) {
+        if (timeRate == 100) {
             bgmapIndex++;
             bgmapIndex = bgmapIndex % bgmap.size();
             timeRate = 0;
