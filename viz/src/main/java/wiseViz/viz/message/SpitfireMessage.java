@@ -84,7 +84,6 @@ public class SpitfireMessage implements Message {
     }
 
     public String getApplication() {
-        System.out.println(message.length);
         return deframeText(message[APPLICATION]);
     }
 
