@@ -8,9 +8,9 @@
 
     <!--    <property name="logfile" value="/home/amaxilatis/Documents/Dropbox/tr.assembly/scripts/trace2.out"/> -->
 
-    <property name="logfile" value="./serialMonitorLogFile.txt"/>
+    <property name="logfile" value="../traces/spitfire/serialMonitorLogFile.txt"/>
     <property name="delay" value="10"/>
-    <property name="propfile" value="./properties/spitfire.properties"/>
+    <property name="propfile" value="../traces/spitfire/spitfire.properties"/>
 
     <!--
         <property name="logfile" value="../traces/tinyRPL/BLIP2_0_6Nodes_20111013.dcf"/>

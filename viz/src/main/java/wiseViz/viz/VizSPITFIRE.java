@@ -3,11 +3,7 @@ package wiseViz.viz;
 
 import wiseViz.viz.base.VizPanel;
 import wiseViz.viz.parsers.spitfire.TRSensorParser;
-import wiseViz.viz.parsers.spitfire.message.CoapParser;
-import wiseViz.viz.parsers.spitfire.message.DymoParser;
-import wiseViz.viz.parsers.spitfire.message.NsNaParser;
-import wiseViz.viz.parsers.spitfire.message.RaRsParser;
-import wiseViz.viz.parsers.spitfire.message.RoutingParser;
+import wiseViz.viz.parsers.spitfire.message.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -65,6 +61,8 @@ public class VizSPITFIRE extends JFrame {
 
         //Set default close operation on the JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        setLocation(-1024, 0);
 
         //Set Frames Dimensions
         //setSize(dim.width, dim.height);

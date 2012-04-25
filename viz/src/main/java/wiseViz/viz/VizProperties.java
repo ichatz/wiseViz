@@ -54,10 +54,11 @@ public class VizProperties {
      * The key for the map image.
      */
     public static final String MAP_FILE = "map-image";
+
     /**
      * The key for the map image.
      */
-    public static final String LOOP_IMAGES = "map-image";
+    public static final String LOOP_IMAGES = "map-collection";
 
     /**
      * The key for the testbed URN.
