@@ -133,9 +133,6 @@ public final class VizPanel extends PApplet {
     private int selectedArduinoPos;
 
     private float prevX, prevY, stepChange;
-    private final boolean loopImages;
-    private int bgmapIndex;
-    private int timeRate = 0;
 
     /**
      * Default constructor.
@@ -166,8 +163,6 @@ public final class VizPanel extends PApplet {
         selectedNode = null;
 
         showBGMap = VizProperties.getInstance().getProperty(VizProperties.MAP_ENABLE, false);
-        loopImages = VizProperties.getInstance().getProperty(VizProperties.LOOP_IMAGES, false);
-        bgmapIndex = 0;
 
         // Load background image
         if ((showBGMap) && (VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, "").length() > 0)) {
@@ -470,7 +465,7 @@ public final class VizPanel extends PApplet {
      * @param tgtNode the target Node.
      */
     public void removeLink(final VizNode srcNode, final VizNode tgtNode) {
-        final double linkID1 = Double.parseDouble(srcNode.getId() + "." + tgtNode.getId());
+        final String linkID1 = srcNode.getId() + "." + tgtNode.getId();
         //final double linkID2 = Double.parseDouble(tgtNode.getId() + "." + srcNode.getId());
 
         // Check if this link is already displayed
@@ -501,11 +496,9 @@ public final class VizPanel extends PApplet {
      * @return the number of nodes displayed.
      */
     public int getNodesSize() {
-        int size = 0;
         synchronized (nodes) {
-            size = nodes.size();
+            return nodes.size();
         }
-        return size;
     }
 
     /**
@@ -515,11 +508,9 @@ public final class VizPanel extends PApplet {
      * @return the VizNode that correspond to the given nodeID.
      */
     public VizNode getArduinoNode(final long nodeId) {
-        VizNode thisNode = null;
         synchronized (arduinoList) {
-            thisNode = arduinoList.get((int) nodeId);
+            return arduinoList.get((int) nodeId);
         }
-        return thisNode;
     }
 
     /**
@@ -529,11 +520,9 @@ public final class VizPanel extends PApplet {
      * @return the VizNode that correspond to the given nodeID.
      */
     public VizNode getNode(final long nodeId) {
-        VizNode thisNode = null;
         synchronized (nodes) {
-            thisNode = nodes.get(nodeId);
+            return nodes.get(nodeId);
         }
-        return thisNode;
     }
 
     /**
