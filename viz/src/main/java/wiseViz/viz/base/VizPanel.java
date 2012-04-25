@@ -202,7 +202,7 @@ public final class VizPanel extends PApplet {
      */
     public void setup() {
         // Create Environment.
-        size(2048, 768, OPENGL);
+        size(2048, 768, JAVA2D);
         textMode(MODEL);
         background(255);
         noStroke();
