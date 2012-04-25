@@ -124,7 +124,7 @@ public final class VizPanel extends PApplet {
 
     /**
      * Associate each packet particle with a link.
-     */
+*     */
     private final ArrayList<VizPacket> packetList;
 
     private boolean enableCam = false;
