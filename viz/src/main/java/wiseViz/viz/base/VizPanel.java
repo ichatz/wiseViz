@@ -10,7 +10,6 @@ import wiseViz.viz.tasks.PulsePacketEvents;
 import java.awt.*;
 import java.io.File;
 import java.util.*;
-import java.util.List;
 
 /**
  * Sophisticated Front End for the FRONTS unified experiment.
@@ -172,13 +171,9 @@ public final class VizPanel extends PApplet {
         // Load collection of background images
         if (VizProperties.getInstance().getProperty(VizProperties.LOOP_IMAGES, "").endsWith("/")) {
             final File path = new File(VizProperties.getInstance().getProperty(VizProperties.LOOP_IMAGES, ""));
-            List<String> files = new ArrayList<String>();
             for (File file : path.listFiles()) {
-                files.add(file.getAbsolutePath());
-            }
-            Collections.sort(files);
-            for (String file : files) {
-                bgmaps.put(file, loadImage(file));
+                System.out.println(file.getName());
+                bgmaps.put(file.getName(), loadImage(file.getAbsolutePath()));
             }
         }
 
@@ -740,6 +735,26 @@ public final class VizPanel extends PApplet {
                         selectedNode.setPosY(screen.height / 2);
                     }
                 }
+                break;
+
+            case 'h':
+                // This is only working for SPITFIRE demo
+                bgmap = bgmaps.get("bigHouseT02-000000.png");
+                break;
+
+            case 'j':
+                // This is only working for SPITFIRE demo
+                bgmap = bgmaps.get("bigHouseT02-100000.png");
+                break;
+
+            case 'k':
+                // This is only working for SPITFIRE demo
+                bgmap = bgmaps.get("bigHouseT02-010000.png");
+                break;
+
+            case 'l':
+                // This is only working for SPITFIRE demo
+                bgmap = bgmaps.get("bigHouseT02-110000.png");
                 break;
 
 //            default:
