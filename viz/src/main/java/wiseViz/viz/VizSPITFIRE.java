@@ -66,6 +66,8 @@ public class VizSPITFIRE extends JFrame {
         //Set default close operation on the JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        setLocation(0,0);
+
         //Set Frames Dimensions
         //setSize(dim.width, dim.height);
         //setSize(1410, 864);
