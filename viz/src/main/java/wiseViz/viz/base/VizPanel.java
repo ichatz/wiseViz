@@ -9,14 +9,8 @@ import wiseViz.viz.tasks.PulsePacketEvents;
 
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-import java.util.Timer;
-import java.util.TreeMap;
 
 /**
  * Sophisticated Front End for the FRONTS unified experiment.
@@ -71,7 +65,12 @@ public final class VizPanel extends PApplet {
     /**
      * Background image.
      */
-    private final List<PImage> bgmap;
+    private PImage bgmap;
+
+    /**
+     * Collection of background images.
+     */
+    private final Map<String, PImage> bgmaps;
 
     /**
      * The x and y coordinates of the image.
@@ -140,6 +139,9 @@ public final class VizPanel extends PApplet {
 
     /**
      * Default constructor.
+     *
+     * @param width  the width of the panel.
+     * @param height the height of the panel.
      */
     @SuppressWarnings("unchecked")
     public VizPanel(final int width, final int height) {
@@ -151,7 +153,7 @@ public final class VizPanel extends PApplet {
         nodesList = new ArrayList<VizNode>();
         packetList = new ArrayList<VizPacket>();
         arduinoList = new ArrayList<VizArduinoNode>();
-        bgmap = new ArrayList<PImage>();
+        bgmaps = new HashMap<String, PImage>();
 
         links = new HashMap<String, VizLink>();
         lastDateTag = "";
@@ -167,26 +169,22 @@ public final class VizPanel extends PApplet {
         loopImages = VizProperties.getInstance().getProperty(VizProperties.LOOP_IMAGES, false);
         bgmapIndex = 0;
 
+        // Load background image
         if ((showBGMap) && (VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, "").length() > 0)) {
+            bgmap = loadImage(VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, ""));
+        }
 
-            if (VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, "").endsWith("/")) {
-                final File path = new File(VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, ""));
-                List<String> files = new ArrayList<String>();
-                for (File file : path.listFiles()) {
-                    files.add(file.getAbsolutePath());
-                }
-                Collections.sort(files);
-                for (String file : files) {
-                    System.out.println(file);
-                    bgmap.add(loadImage(file));
-                }
-            } else {
-                System.out.println("this is not a path");
-                bgmap.add(loadImage(VizProperties.getInstance().getProperty(VizProperties.MAP_FILE, "")));
+        // Load collection of background images
+        if (VizProperties.getInstance().getProperty(VizProperties.LOOP_IMAGES, "").endsWith("/")) {
+            final File path = new File(VizProperties.getInstance().getProperty(VizProperties.LOOP_IMAGES, ""));
+            List<String> files = new ArrayList<String>();
+            for (File file : path.listFiles()) {
+                files.add(file.getAbsolutePath());
             }
-
-        } else {
-
+            Collections.sort(files);
+            for (String file : files) {
+                bgmaps.put(file, loadImage(file));
+            }
         }
 
         nodeSize = VizProperties.getInstance().getProperty(VizProperties.NODE_SIZE, DEFAULT_NODE_SIZE);
@@ -209,7 +207,7 @@ public final class VizPanel extends PApplet {
      */
     public void setup() {
         // Create Environment.
-        size(2048, 768, JAVA2D);
+        size(2048, 768, OPENGL);
         textMode(MODEL);
         background(255);
         noStroke();
@@ -230,18 +228,16 @@ public final class VizPanel extends PApplet {
     private void setupBGMap() {
         // resize bg image
         if (showBGMap) {
-            for (PImage img : bgmap) {
-                img.resize(screen.width, 0);
-                if (img.height > screen.height) {
-                    img.resize(0, screen.height);
-                }
+            bgmap.resize(screen.width, 0);
+            if (bgmap.height > screen.height) {
+                bgmap.resize(0, screen.height);
             }
 
-            scaleX = (float) bgmap.get(bgmapIndex).width / origX;
-            scaleY = (float) bgmap.get(bgmapIndex).height / origY;
+            scaleX = (float) bgmap.width / origX;
+            scaleY = (float) bgmap.height / origY;
 
-            offsetX = (screen.width - bgmap.get(bgmapIndex).width) / 2;
-            offsetY = (screen.height - bgmap.get(bgmapIndex).height) / 2;
+            offsetX = (screen.width - bgmap.width) / 2;
+            offsetY = (screen.height - bgmap.height) / 2;
 
         } else {
             scaleX = screen.width / origX;
@@ -260,19 +256,6 @@ public final class VizPanel extends PApplet {
             // Send ND packets
             timer.scheduleAtFixedRate(new PulsePacketEvents(this), FLUSH_SPEED_PKT, FLUSH_SPEED_PKT);
 
-//            //change bg
-//            timer.scheduleAtFixedRate(new TimerTask() {
-//                @Override
-//                public void run() {
-//                    if (showBGMap) {
-//                        background(255);
-//                        fill(0);
-//                        image(bgmap.get(bgmapIndex), offsetX, offsetY);
-//                    }
-//                    bgmapIndex++;
-//                }
-//            }, 1000, 1000);
-
             // Process camera
             //timer.scheduleAtFixedRate(new OpenCVTask(this), 3000, FLUSH_SPEED_LNK);
 
@@ -288,17 +271,10 @@ public final class VizPanel extends PApplet {
         if (showBGMap) {
             background(255);
             fill(0);
-            image(bgmap.get(bgmapIndex), offsetX, offsetY);
+            image(bgmap, offsetX, offsetY);
         } else {
             background(0);
             fill(255);
-        }
-        timeRate++;
-        this.setLastDateTag(bgmapIndex + ":00");
-        if (timeRate == 100) {
-            bgmapIndex++;
-            bgmapIndex = bgmapIndex % bgmap.size();
-            timeRate = 0;
         }
 
         // Draw Date & Time of last tag
@@ -567,11 +543,9 @@ public final class VizPanel extends PApplet {
      * @return true if it is registered, otherwise false.
      */
     public boolean containsNode(final long nodeId) {
-        boolean exists = false;
         synchronized (nodes) {
-            exists = nodes.containsKey(nodeId);
+            return nodes.containsKey(nodeId);
         }
-        return exists;
     }
 
     /**
@@ -685,7 +659,7 @@ public final class VizPanel extends PApplet {
 
                     // make sure that the bg image is saved
                     if (bgmap != null) {
-                        VizProperties.getInstance().setProperty(VizProperties.SCREEN_SIZE, bgmap.get(bgmapIndex).width + "," + bgmap.get(bgmapIndex).height);
+                        VizProperties.getInstance().setProperty(VizProperties.SCREEN_SIZE, bgmap.width + "," + bgmap.height);
                     } else {
                         VizProperties.getInstance().setProperty(VizProperties.SCREEN_SIZE, screen.width + "," + screen.height);
                     }
