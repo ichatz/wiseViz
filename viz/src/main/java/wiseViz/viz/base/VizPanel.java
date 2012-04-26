@@ -796,4 +796,8 @@ public final class VizPanel extends PApplet {
     public int getOffsetY() {
         return offsetY;
     }
+
+    public void setBgImage(String filename) {
+        bgmap=bgmaps.get(filename);
+    }
 }
