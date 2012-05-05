@@ -2,6 +2,7 @@ package wiseViz.viz;
 
 
 import wiseViz.viz.base.VizPanel;
+import wiseViz.viz.parsers.spitfire.SemanticGroupsParser;
 import wiseViz.viz.parsers.spitfire.TRSensorParser;
 import wiseViz.viz.parsers.spitfire.message.*;
 
@@ -97,6 +98,7 @@ public class VizSPITFIRE extends JFrame {
                 lproc.addObserver(new NsNaParser(panel));
                 lproc.addObserver(new TRSensorParser(panel));
                 lproc.addObserver(new RoutingParser(panel));
+                lproc.addObserver(new SemanticGroupsParser(panel));
                 //lproc.addObserver(new wiseViz.viz.parsers.fronts.TimestampParser(panel));
 
                 //Adding a new observer example

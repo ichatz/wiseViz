@@ -106,7 +106,7 @@ public final class VizLink {
                     break;
 
                 case LINK_CRADIO:
-                    parent.stroke(Color.GREEN.getRGB(), alpha);
+                    parent.stroke(Color.RED.getRGB(), alpha);
                     parent.strokeWeight(2);
                     break;
 
@@ -119,7 +119,6 @@ public final class VizLink {
                     parent.stroke(Color.GREEN.getRGB(), alpha);
                     parent.strokeWeight(2);
                     return;
-
                 case LINK_MSG_RCVD:
                 default:
                     parent.stroke(Color.GREEN.getRGB(), alpha);
@@ -238,7 +237,6 @@ public final class VizLink {
             case LINK_UNI:
                 thisAlpha = 150;
                 break;
-
             case LINK_MSG_RCVD:
             default:
                 thisAlpha = 70;
@@ -269,7 +267,6 @@ public final class VizLink {
             case LINK_UNI:
                 thisAlpha = 70;
                 break;
-
             case LINK_MSG_RCVD:
             default:
                 thisAlpha = 5;

@@ -43,7 +43,13 @@ public class TRSensorParser extends AbstractParser {
             final String[] parts = message.getPayload().split(" ");
             try {
                 double value = Double.parseDouble(parts[2]);
-                thisNode.addSensorValue(parts[1], String.valueOf(value));
+                if ("EM_T".equals(parts[1])) {
+                    thisNode.addSensorValue("Temperature", String.valueOf(value));
+                } else if ("EM_L".equals(parts[1])) {
+                    thisNode.addSensorValue("Luminosity", String.valueOf(value));
+                } else {
+                    thisNode.addSensorValue(parts[1], String.valueOf(value));
+                }
             } catch (NumberFormatException nfe) {
 
             }
